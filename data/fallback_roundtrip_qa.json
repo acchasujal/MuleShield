@@ -1,0 +1,17 @@
+[
+  {
+    "answer": "The circular flow involves accounts ACC05200000000035 (Manoj Tiwari), ACC05200000000009 (Lalita Chatterjee), and ACC05200000000001 (Meena Iyer). \n\nThe transaction from ACC05200000000009 to ACC05200000000035 started at 20:57:00 on 2025-09-01, and the initial transaction from ACC05200000000035 to ACC05200000000001 occurred at 20:14:00 on 2025-09-01. This indicates that the circular flow took approximately 43 minutes to complete.",
+    "question": "Which accounts form the circular flow and how long did it take?",
+    "model_used": "meta/llama-3.1-8b-instruct"
+  },
+  {
+    "answer": "To calculate the total amount laundered, we need to identify the source and destination accounts. \n\nThe source account is ACC05200000000035 (Manoj Tiwari) and the destination account is ACC05200000000009 (Lalita Chatterjee). \n\nThe total amount laundered is ₹16.19 crore.",
+    "question": "What is the total amount laundered across all hops?",
+    "model_used": "meta/llama-3.1-8b-instruct"
+  },
+  {
+    "answer": "Based on the transaction data, account ACC05200000000035 (Manoj Tiwari) initiated the round-trip. The transactions from and to this account are: ₹18.28 crore to Meena Iyer and ₹16.19 crore from Lalita Chatterjee.",
+    "question": "Which account initiated the round-trip?",
+    "model_used": "meta/llama-3.1-8b-instruct"
+  }
+]

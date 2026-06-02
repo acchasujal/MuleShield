@@ -1,0 +1,74 @@
+# =============================================================================
+# MuleShield AI — Production Gitignore
+# =============================================================================
+
+# --- Secrets & Configurations ---
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+secrets.json
+
+# --- Python Virtual Environments ---
+venv/
+.venv/
+env/
+ENV/
+lib/pip-selfcheck.json
+
+# --- Python Cache & Bytecode ---
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+**/*.pyc
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# --- IDE & Editor configurations ---
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.project
+.pydevproject
+.settings/
+
+# --- Operating System Files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# --- Logs, Diagnostics & Temp files ---
+*.log
+logs/
+**/logs/
+*.tmp
+*.temp
+temp_*.html
+proof_*.txt
+db_test_output.txt
+regression_*.txt
+
+# --- Distribution / Build ---
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+
+# --- Database & Container Caches ---
+postgres-data/
+neo4j-data/
+neo4j-logs/
+.db_mule_cache/
+data/boi/DataSet.csv
+
+# --- Frontend Node Dependencies (if any) ---
+node_modules/
+package-lock.json

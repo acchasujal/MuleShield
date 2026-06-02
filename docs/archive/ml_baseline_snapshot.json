@@ -1,0 +1,52 @@
+{
+  "startup_ms": 143.6404000269249,
+  "single_pred_ms": 59.52670000260696,
+  "batch_pred_ms": 119.31819998426363,
+  "single_result": {
+    "ml_score": 3.564574581105262e-05,
+    "mule_stage": "LEGITIMATE",
+    "shap_keys": [
+      "F3898",
+      "F2230",
+      "F3908",
+      "F1216",
+      "F886"
+    ],
+    "shap_vals": [
+      -7.308977,
+      -7.107384,
+      -1.445628,
+      -0.634932,
+      0.564108
+    ]
+  },
+  "batch_results": [
+    {
+      "ml_score": 7.933117012726143e-05,
+      "mule_stage": "LEGITIMATE"
+    },
+    {
+      "ml_score": 0.02227122336626053,
+      "mule_stage": "LEGITIMATE"
+    },
+    {
+      "ml_score": 1.836081537476275e-05,
+      "mule_stage": "LEGITIMATE"
+    },
+    {
+      "ml_score": 6.595012382604182e-05,
+      "mule_stage": "LEGITIMATE"
+    },
+    {
+      "ml_score": 4.0855014958651736e-05,
+      "mule_stage": "LEGITIMATE"
+    }
+  ],
+  "fusion_85_70": 48.0,
+  "fusion_10_none": 6.0,
+  "lifecycle_align": "UNDER_REVIEW",
+  "acc9_ml_score": 1.5125700883800164e-05,
+  "acc9_mule_stage": "LEGITIMATE",
+  "acc9002_ml_score": 1.3416276487987489e-05,
+  "acc9002_mule_stage": "ACTIVE_MULE"
+}

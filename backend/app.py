@@ -1,64 +1,70 @@
-from fastapi import FastAPI, UploadFile
-import pandas as pd
+"""
+MuleShield AI — FastAPI Backend Gateway
+App configuration, lifespan, and router aggregation.
+"""
 
-from backend.graph_builder import build_graph
-from backend.fraud_detection import *
-from backend.risk_scoring import calculate_risk
-from backend.explain import generate_explanation
+import logging
+from contextlib import asynccontextmanager
+from dotenv import load_dotenv
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+# Initialize environment variables
+load_dotenv()
+
+# Logger setup
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logger = logging.getLogger("muleshield")
+
+# Internal Service imports
+from backend.ml_service import MLService
+from backend.graph_service import Neo4jService
+from backend.database import init_db
+
+# Router imports
+from backend.routers.ml_predict import router as ml_predict_router
+from backend.routers.i4c_webhook import router as i4c_webhook_router
+from backend.routers.analyze import router as analyze_router
+from backend.routers.ai_chat import router as ai_chat_router
+from backend.routers.health import router as health_router
 
 
-def get_fraud_paths(cycles):
-    paths = []
-    for cycle in cycles:
-        path = " → ".join(cycle + [cycle[0]])
-        paths.append(path)
-    return paths
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info("Initializing MuleShield ML Service...")
+    ml_service = MLService()
+    app.state.ml_service = ml_service
+
+    logger.info("Initializing MuleShield Graph Database Service...")
+    graph_service = Neo4jService()
+    app.state.graph_service = graph_service
+
+    # PostgreSQL Database Pool Initialization & Migrations
+    await init_db()
+
+    yield
+
+    logger.info("Shutting down MuleShield Services...")
+    graph_service.close()
+    logger.info("MuleShield Services shutdown complete.")
 
 
-@app.post("/analyze")
-async def analyze(file: UploadFile):
+app = FastAPI(title="MuleShield-AI", version="3.0", lifespan=lifespan)
 
-    df = pd.read_csv(file.file)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8501", "http://127.0.0.1:8501"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
 
-    G = build_graph(df)
-
-    cycles = detect_cycles(G)
-
-    signals = {
-        "cycle": [n for c in cycles for n in c],
-        "layering": [n for p in detect_layering(G) for n in p],
-        "structuring": detect_structuring(df),
-        "velocity": detect_velocity(df),
-        "anomaly": detect_anomaly(df),
-        "dormant": detect_dormant(df),
-        "ml_anomaly": ml_anomaly(df)
-    }
-
-    results = []
-
-    # ✅ THIS LOOP MUST BE INSIDE FUNCTION
-    for node in G.nodes:
-
-        score, severity, reasons = calculate_risk(node, signals)
-
-        explanation = generate_explanation(node, df, signals)
-
-        if score > 0:
-            results.append({
-                "account": node,
-                "risk_score": score,
-                "severity": severity,
-                "reasons": reasons,
-                "explanation": explanation["summary"],
-                "evidence": explanation["evidence"]
-            })
-
-    fraud_paths = get_fraud_paths(cycles)
-
-    return {
-        "alerts": sorted(results, key=lambda x: x['risk_score'], reverse=True),
-        "signals": signals,
-        "fraud_paths": fraud_paths
-    }
+# Route registrations
+app.include_router(health_router)
+app.include_router(analyze_router)
+app.include_router(ai_chat_router)
+app.include_router(ml_predict_router)
+app.include_router(i4c_webhook_router)

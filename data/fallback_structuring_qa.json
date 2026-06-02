@@ -1,0 +1,17 @@
+[
+  {
+    "answer": "Based on the given transaction data, there are no transactions below the ₹1 lakh threshold. All transactions involve amounts above ₹1 lakh.",
+    "question": "How many transactions were made below the ₹1 lakh threshold?",
+    "model_used": "meta/llama-3.1-8b-instruct"
+  },
+  {
+    "answer": "The cumulative total of the structured transactions is ₹8.49 crore. \n\nThis is calculated by adding up the amounts of all the transactions: \n99226.67 + 89801.67 = ₹1.89 crore\n+ 86672.46 = ₹2.75 crore\n+ 87589.23 = ₹3.63 crore\n+ 85554.73 = ₹4.48 crore\n+ 91301.17 = ₹5.39 crore\n+ 96403.21 = ₹6.35 crore\n+ 93790.03 = ₹7.29 crore\n+ 86676.86 = ₹8.15 crore\n+ 99226.67 = ₹8.49 crore",
+    "question": "What is the cumulative total of the structured transactions?",
+    "model_used": "meta/llama-3.1-8b-instruct"
+  },
+  {
+    "answer": "Account ACC05200000000012, held by Vikram Patel, initiated the structuring. It made 9 transactions in a short span, with multiple recipients and varying amounts.",
+    "question": "Which account initiated the structuring?",
+    "model_used": "meta/llama-3.1-8b-instruct"
+  }
+]

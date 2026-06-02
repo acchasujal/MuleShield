@@ -1,20 +1,40 @@
-def calculate_risk(account, signals):
+"""
+MuleShield-AI — Risk Scoring Engine (backward-compat facade)
+
+All scoring logic now lives in backend/ml/score_fusion.py.
+This module re-exports everything unchanged so existing callers
+(`from backend.risk_scoring import ...`) continue to work without any
+modification.
+"""
+
+from backend.ml.score_fusion import (  # noqa: F401 — re-export
+    PROFILE_WEIGHT,
+    TRANSACTION_WEIGHT,
+    GRAPH_WEIGHT,
+    SIGNAL_WEIGHTS,
+    calculate_transaction_score,
+    calculate_composite_risk,
+    assign_tier,
+    align_lifecycle_stage,
+)
+
+# Legacy function kept for /analyze endpoint compatibility
+def calculate_risk(account: str, signals: dict) -> tuple:
+    """Score an account against all detected fraud signals.
+
+    Args:
+        account:  Account ID to evaluate.
+        signals:  Dict of {signal_name: set_of_flagged_accounts}.
+
+    Returns:
+        (score, severity, reasons) tuple.
+    """
     score = 0
     reasons = []
 
-    weights = {
-        "cycle": 50,
-        "layering": 30,
-        "structuring": 20,
-        "velocity": 25,
-        "anomaly": 35,
-        "dormant": 20,
-        "ml_anomaly": 40
-    }
-
     for signal, accounts in signals.items():
         if account in accounts:
-            score += weights.get(signal, 0)
+            score += SIGNAL_WEIGHTS.get(signal, 0)
             reasons.append(signal)
 
     if score >= 70:

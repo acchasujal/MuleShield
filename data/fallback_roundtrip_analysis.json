@@ -1,0 +1,161 @@
+{
+  "alerts": [
+    {
+      "account": "ACC05200000000009",
+      "risk_score": 120,
+      "severity": "HIGH",
+      "reasons": [
+        "cycle",
+        "layering",
+        "ml_anomaly"
+      ],
+      "explanation": "🔁 Circular transactions detected: funds leave and return to Lalita Chatterjee (ACC05200000000009), indicating possible round-tripping. 🔄 Layering behavior detected: funds move across multiple accounts to obscure origin from Lalita Chatterjee (ACC05200000000009). 🤖 ML anomaly: Lalita Chatterjee (ACC05200000000009)'s transaction behaviour deviates significantly from normal patterns (Isolation Forest).",
+      "evidence": [
+        {
+          "from_account": "ACC05200000000009",
+          "to_account": "ACC05200000000035",
+          "amount": 161905.41,
+          "timestamp": "2025-09-01 20:57:00",
+          "from_name": "Lalita Chatterjee",
+          "to_name": "Manoj Tiwari",
+          "channel": "RTGS"
+        }
+      ]
+    },
+    {
+      "account": "ACC05200000000035",
+      "risk_score": 80,
+      "severity": "HIGH",
+      "reasons": [
+        "cycle",
+        "layering"
+      ],
+      "explanation": "🔁 Circular transactions detected: funds leave and return to Manoj Tiwari (ACC05200000000035), indicating possible round-tripping. 🔄 Layering behavior detected: funds move across multiple accounts to obscure origin from Manoj Tiwari (ACC05200000000035).",
+      "evidence": [
+        {
+          "from_account": "ACC05200000000035",
+          "to_account": "ACC05200000000001",
+          "amount": 182840.23,
+          "timestamp": "2025-09-01 20:14:00",
+          "from_name": "Manoj Tiwari",
+          "to_name": "Meena Iyer",
+          "channel": "NEFT"
+        }
+      ]
+    },
+    {
+      "account": "ACC05200000000001",
+      "risk_score": 80,
+      "severity": "HIGH",
+      "reasons": [
+        "cycle",
+        "layering"
+      ],
+      "explanation": "🔁 Circular transactions detected: funds leave and return to Meena Iyer (ACC05200000000001), indicating possible round-tripping. 🔄 Layering behavior detected: funds move across multiple accounts to obscure origin from Meena Iyer (ACC05200000000001).",
+      "evidence": [
+        {
+          "from_account": "ACC05200000000001",
+          "to_account": "ACC05200000000037",
+          "amount": 178385.35,
+          "timestamp": "2025-09-01 20:23:00",
+          "from_name": "Meena Iyer",
+          "to_name": "Rekha Pandey 4",
+          "channel": "IMPS"
+        }
+      ]
+    },
+    {
+      "account": "ACC05200000000037",
+      "risk_score": 80,
+      "severity": "HIGH",
+      "reasons": [
+        "cycle",
+        "layering"
+      ],
+      "explanation": "🔁 Circular transactions detected: funds leave and return to Rekha Pandey 4 (ACC05200000000037), indicating possible round-tripping. 🔄 Layering behavior detected: funds move across multiple accounts to obscure origin from Rekha Pandey 4 (ACC05200000000037).",
+      "evidence": [
+        {
+          "from_account": "ACC05200000000037",
+          "to_account": "ACC05200000000021",
+          "amount": 173760.17,
+          "timestamp": "2025-09-01 20:33:00",
+          "from_name": "Rekha Pandey 4",
+          "to_name": "Arun Bose",
+          "channel": "RTGS"
+        }
+      ]
+    },
+    {
+      "account": "ACC05200000000021",
+      "risk_score": 80,
+      "severity": "HIGH",
+      "reasons": [
+        "cycle",
+        "layering"
+      ],
+      "explanation": "🔁 Circular transactions detected: funds leave and return to Arun Bose (ACC05200000000021), indicating possible round-tripping. 🔄 Layering behavior detected: funds move across multiple accounts to obscure origin from Arun Bose (ACC05200000000021).",
+      "evidence": [
+        {
+          "from_account": "ACC05200000000021",
+          "to_account": "ACC05200000000007",
+          "amount": 169420.06,
+          "timestamp": "2025-09-01 20:39:00",
+          "from_name": "Arun Bose",
+          "to_name": "Hema Malhotra",
+          "channel": "NEFT"
+        }
+      ]
+    },
+    {
+      "account": "ACC05200000000007",
+      "risk_score": 80,
+      "severity": "HIGH",
+      "reasons": [
+        "cycle",
+        "layering"
+      ],
+      "explanation": "🔁 Circular transactions detected: funds leave and return to Hema Malhotra (ACC05200000000007), indicating possible round-tripping. 🔄 Layering behavior detected: funds move across multiple accounts to obscure origin from Hema Malhotra (ACC05200000000007).",
+      "evidence": [
+        {
+          "from_account": "ACC05200000000007",
+          "to_account": "ACC05200000000009",
+          "amount": 165772.7,
+          "timestamp": "2025-09-01 20:49:00",
+          "from_name": "Hema Malhotra",
+          "to_name": "Lalita Chatterjee",
+          "channel": "NEFT"
+        }
+      ]
+    }
+  ],
+  "signals": {
+    "cycle": [
+      "ACC05200000000001",
+      "ACC05200000000007",
+      "ACC05200000000009",
+      "ACC05200000000021",
+      "ACC05200000000035",
+      "ACC05200000000037"
+    ],
+    "layering": [
+      "ACC05200000000001",
+      "ACC05200000000007",
+      "ACC05200000000009",
+      "ACC05200000000021",
+      "ACC05200000000035",
+      "ACC05200000000037"
+    ],
+    "structuring": [],
+    "velocity": [],
+    "anomaly": [],
+    "dormant": [],
+    "ml_anomaly": [
+      "ACC05200000000009"
+    ]
+  },
+  "fraud_paths": [
+    "ACC05200000000009 → ACC05200000000035 → ACC05200000000001 → ACC05200000000037 → ACC05200000000021 → ACC05200000000007 → ACC05200000000009"
+  ],
+  "evidence_hash": "2093a2b5befc87ac039a19f6fce1e82c2249691e01cbc4ae0c69f281d08e8fa0",
+  "hash_generated_at": "2026-06-01T17:42:05.917921+00:00"
+}

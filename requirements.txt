@@ -3,8 +3,18 @@ uvicorn
 pandas
 networkx
 streamlit
-matplotlib
 scikit-learn
 python-multipart
 pyvis
 reportlab
+google-genai
+python-dotenv
+openai          # used for both NVIDIA NIM client and OpenAI fallback
+xgboost
+imbalanced-learn
+shap
+neo4j
+asyncpg
+sqlalchemy
+plotly
+
