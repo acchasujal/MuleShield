@@ -50,6 +50,17 @@ graph TD
 
 ---
 
+## Dataset Setup
+MuleShield AI requires a Bank of India (BOI) transaction dataset for training and full inference pipelines.
+* The full BOI dataset (`DataSet.csv`) is **not included** in this GitHub repository due to file size limits and data distribution constraints.
+* Users must place their transaction dataset at:
+  ```path
+  data/boi/DataSet.csv
+  ```
+* For detailed instructions and directory structure information, please refer to the [data/README.md](file:///d:/Projects/FundTrace-AI/data/README.md).
+
+---
+
 ## 4. Installation
 MuleShield AI is designed for rapid one-command setup. Ensure Python 3.10+ is installed on your local host machine.
 

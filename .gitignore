@@ -67,7 +67,13 @@ postgres-data/
 neo4j-data/
 neo4j-logs/
 .db_mule_cache/
+
+# --- Datasets & AI Outputs ---
 data/boi/DataSet.csv
+data/*.csv
+data/fallback_*.json
+data/archive/
+data/legacy/
 
 # --- Frontend Node Dependencies (if any) ---
 node_modules/
