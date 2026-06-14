@@ -7,6 +7,7 @@ import asyncio
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from backend.risk_scoring import calculate_composite_risk, assign_tier, align_lifecycle_stage
+from backend.ml.score_fusion import derive_behavioral_txn_score
 from backend.xml_generator import generate_goaml_xml
 from backend.database import init_db, log_case_audit
 
@@ -28,6 +29,51 @@ class TestIntegrations(unittest.TestCase):
         # Case C: Extreme values clamping bounds [0.0, 100.0]
         self.assertEqual(calculate_composite_risk(-0.5, -0.2, -50), 0.0)
         self.assertEqual(calculate_composite_risk(1.5, 1.2, 150), 100.0)
+
+    def test_derive_behavioral_txn_score(self):
+        """Verify behavioral transaction score derivation from BOI features.
+        A confirmed mule profile must produce a non-zero score that enables CRITICAL tier.
+        """
+        # Confirmed mule: max behavioral signals
+        mule_features = {
+            "F115":  0.90,   # High transaction throughput ratio → 27 pts
+            "F886":  0.80,   # High UPI spike → 16 pts
+            "F3908": 0.85,   # High velocity ratio → 21.25 pts
+            "F670":  1.0,    # Regulatory watchlist flag → 15 pts
+            "F3889": "G365D",# Dormant reactivation → 10 pts
+        }
+        score = derive_behavioral_txn_score(mule_features)
+        # Minimum expected: 27 + 16 + 21.25 + 15 + 10 = 89.25, clamped to 100
+        self.assertGreaterEqual(score, 80.0, "Confirmed mule behavioral score must be >= 80")
+        self.assertLessEqual(score, 100.0, "Score must be clamped at 100")
+
+        # Legitimate account: all zeros → score = 0
+        legit_features = {"F115": 0.0, "F886": 0.0, "F3908": 0.0, "F670": 0.0, "F3889": "L365D"}
+        legit_score = derive_behavioral_txn_score(legit_features)
+        self.assertEqual(legit_score, 0.0, "Legitimate account should score 0.0")
+
+    def test_confirmed_mule_reaches_critical(self):
+        """Verify that a confirmed mule account can reach CRITICAL tier via fusion.
+
+        Prior bug: txn_score=0.0 was hardcoded, so max achievable with ml=0.85 was 51.0 (MEDIUM).
+        After fix: behavioral txn_score from BOI features raises composite above 80.0 (CRITICAL).
+        """
+        mule_features = {
+            "F115":  0.90,
+            "F886":  0.80,
+            "F3908": 0.85,
+            "F670":  1.0,
+            "F3889": "G365D",
+        }
+        ml_score = 0.85
+        graph_score = 0.85   # fallback = ml_score
+        behav_txn_score = derive_behavioral_txn_score(mule_features)
+
+        composite = calculate_composite_risk(ml_score, graph_score, behav_txn_score)
+        tier = assign_tier(composite)
+
+        self.assertGreaterEqual(composite, 80.0, f"Composite {composite} must reach >= 80.0 for CRITICAL")
+        self.assertEqual(tier, "CRITICAL", "Confirmed mule with max behavioral signals must be CRITICAL")
 
     def test_mule_lifecycle_stage_alignments(self):
         """Verify the logic that uplifts LEGITIMATE profiles to UNDER_REVIEW."""

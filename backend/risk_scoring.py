@@ -13,6 +13,7 @@ from backend.ml.score_fusion import (  # noqa: F401 — re-export
     GRAPH_WEIGHT,
     SIGNAL_WEIGHTS,
     calculate_transaction_score,
+    derive_behavioral_txn_score,
     calculate_composite_risk,
     assign_tier,
     align_lifecycle_stage,

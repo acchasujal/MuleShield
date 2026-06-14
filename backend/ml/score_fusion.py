@@ -25,6 +25,57 @@ SIGNAL_WEIGHTS = {
 }
 
 
+def derive_behavioral_txn_score(raw_features: dict) -> float:
+    """Derive a transaction risk proxy from BOI behavioral account features.
+
+    Used when transaction logs are unavailable (predict/single, predict/batch)
+    to prevent txn_score from being perpetually 0.0 for confirmed mule accounts.
+
+    Feature contributions (max 100 pts total):
+        F115  — transaction throughput ratio        (0–30 pts, weight 30)
+        F886  — UPI channel-switching spike         (0–20 pts, weight 20)
+        F3908 — high velocity in/out ratio          (0–25 pts, weight 25)
+        F670  — regulatory watchlist flag (0–1)     (0–15 pts, weight 15)
+        F3889 — dormant age bucket G365D/L7D/L90D   (0–10 pts, flat)
+
+    Args:
+        raw_features: Raw feature dict from lookup_account_features().
+
+    Returns:
+        Behavioral transaction risk score in [0.0, 100.0].
+    """
+    score = 0.0
+
+    try:
+        # F115 — transaction throughput ratio [0, 1+]
+        f115 = float(raw_features.get("F115", 0) or 0)
+        score += min(f115, 1.0) * 30.0
+
+        # F886 — UPI spike proxy [0, 1+]
+        f886 = float(raw_features.get("F886", 0) or 0)
+        score += min(f886, 1.0) * 20.0
+
+        # F3908 — velocity in/out ratio [0, 1+]
+        f3908 = float(raw_features.get("F3908", 0) or 0)
+        score += min(f3908, 1.0) * 25.0
+
+        # F670 — regulatory watchlist flag [0, 1]
+        f670 = float(raw_features.get("F670", 0) or 0)
+        score += min(f670, 1.0) * 15.0
+
+        # F3889 — account age bucket (dormant/new = elevated risk)
+        age_bucket = raw_features.get("F3889", "")
+        if age_bucket in ("G365D", 4):        # dormant reactivation
+            score += 10.0
+        elif age_bucket in ("L7D", "L90D", 1, 2):  # newly recruited
+            score += 5.0
+
+    except Exception:
+        pass
+
+    return round(min(score, 100.0), 1)
+
+
 def calculate_transaction_score(reasons: list[str]) -> float:
     """Calculate a normalized 0–100 transaction score from matched signal names.
 
