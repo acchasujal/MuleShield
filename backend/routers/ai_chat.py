@@ -18,9 +18,8 @@ from backend.ai_service import (
     _str_cache,
     MAX_STR_TXN,
     MAX_ASK_TXN,
-    NVIDIA_STR_MODEL,
-    NVIDIA_ASK_MODEL,
 )
+
 
 logger = logging.getLogger("muleshield.ai_chat")
 
@@ -90,9 +89,9 @@ Write the STR with EXACTLY these sections (plain text, no markdown):
 9. INVESTIGATING OFFICER: [To be assigned]
 10. REPORT GENERATED: {generated_at}"""
 
-    # Use Llama 3.1 70B for STR (best structured long-form output)
+    # Use fallback chain for STR (best structured long-form output)
     str_text, model_used = await _generate_with_fallback(
-        prompt, max_tokens=1200, nvidia_model=NVIDIA_STR_MODEL
+        prompt, max_tokens=1200, task_type="str"
     )
 
     result = {
@@ -112,8 +111,6 @@ Write the STR with EXACTLY these sections (plain text, no markdown):
 async def ask(body: AskRequest):
     """
     Answer a natural-language question about transaction data.
-    PRIMARY:  NVIDIA Llama-3.1-8b-instruct (fast, concise)
-    FALLBACK: Gemini 2.0 Flash
     """
     slim_txn = _slim_transactions(body.transactions, MAX_ASK_TXN)
 
@@ -128,9 +125,9 @@ QUESTION: {body.question}
 
 Answer:"""
 
-    # Use Llama 3.1 8B for Q&A — fastest model for short factual responses
+    # Use fallback chain for Q&A — fastest model for short factual responses
     answer, model_used = await _generate_with_fallback(
-        prompt, max_tokens=300, nvidia_model=NVIDIA_ASK_MODEL
+        prompt, max_tokens=300, task_type="ask"
     )
     logger.info(f"Ask answered via {model_used}")
     return {"answer": answer, "question": body.question, "model_used": model_used}
