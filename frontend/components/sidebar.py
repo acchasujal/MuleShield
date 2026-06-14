@@ -20,7 +20,7 @@ def render_sidebar(load_scenario_callback) -> tuple[str, str, object]:
         
         view_selection = st.radio(
             "🧭 System Navigation",
-            ["🎮 Demo Mode", "📈 Executive Dashboard", "🕵️ Alert Center", "🔍 Account Inspector", "📊 Dataset Intelligence", "⚙️ Deployment Roadmap", "🌐 I4C Webhook Auditor"],
+            ["🎮 Demo Mode", "📈 Executive Dashboard", "🕵️ Alert Center", "🔍 Account Inspector", "📐 Model Metrics", "📊 Dataset Intelligence", "⚙️ Deployment Roadmap", "🌐 I4C Webhook Auditor"],
             index=0
         )
         

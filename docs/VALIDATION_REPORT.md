@@ -142,6 +142,33 @@ All outputs compared field-by-field between pre-refactor baseline snapshots (`ml
 | `batch[0].ml_score` | `0.000079` | `0.000079` | `0.0` | ✅ Identical |
 | `acc9.ml_score` | `0.000015` | `0.000015` | `0.0` | ✅ Identical |
 | `acc9002.ml_score` | `0.000013` | `0.000013` | `0.0` | ✅ Identical |
+| `acc9002.mule_stage` | `ACTIVE_MULE` | `ACTIVE_MULE` | `None` | ✅ Identical |
+
+### 4.4 Stratified Validation Split Performance (80/20)
+
+To establish the predictive capability of the XGBoost classifier on unseen data, the model was evaluated on a stratified 80/20 train/validation split of the Bank of India (`boi`) dataset (`DataSet.csv`). 
+
+* **Training Partition:** 7,265 rows (Legitimate: 7,200, Mule: 65) — oversampled using SMOTE to 14,400 balanced rows.
+* **Validation Partition:** 1,817 rows (Legitimate: 1,801, Mule: 16) — kept in the original imbalanced distribution.
+
+The performance metrics on the validation split are:
+* **ROC-AUC:** `1.000000`
+* **PR-AUC (Average Precision):** `1.000000`
+* **F1-Score:** `0.888889`
+* **Precision:** `0.800000`
+* **Recall:** `1.000000`
+
+#### Detailed Classification Report
+```
+              precision    recall  f1-score   support
+
+  Legitimate       1.00      1.00      1.00      1801
+        Mule       0.80      1.00      0.89        16
+
+    accuracy                           1.00      1817
+   macro avg       0.90      1.00      0.94      1817
+weighted avg       1.00      1.00      1.00      1817
+```
 
 ---
 

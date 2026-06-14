@@ -11,6 +11,7 @@ from .lifecycle_engine import classify_mule_stage
 from .score_fusion import (
     calculate_composite_risk,
     calculate_transaction_score,
+    derive_behavioral_txn_score,
     assign_tier,
     align_lifecycle_stage,
     SIGNAL_WEIGHTS,
@@ -27,6 +28,7 @@ __all__ = [
     "classify_mule_stage",
     "calculate_composite_risk",
     "calculate_transaction_score",
+    "derive_behavioral_txn_score",
     "assign_tier",
     "align_lifecycle_stage",
     "SIGNAL_WEIGHTS",

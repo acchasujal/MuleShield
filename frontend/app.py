@@ -19,6 +19,7 @@ from frontend.components.demo_mode import render_demo_mode_view
 from frontend.components.executive_dashboard import render_executive_dashboard_view
 from frontend.components.alert_center import render_alert_center_view
 from frontend.components.account_inspector import render_account_inspector_view
+from frontend.components.model_metrics import render_model_metrics_view
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Page config (MUST be the very first Streamlit call)
@@ -180,6 +181,9 @@ elif view_selection == "🕵️ Alert Center":
 elif view_selection == "🔍 Account Inspector":
     render_account_inspector_view(target_account_id)
 
+elif view_selection == "📐 Model Metrics":
+    render_model_metrics_view()
+
 elif view_selection == "📊 Dataset Intelligence":
     st.subheader("📊 DataSet.csv Intelligence & Exclusions")
     st.markdown("""
@@ -270,5 +274,5 @@ elif view_selection == "🌐 I4C Webhook Auditor":
             except Exception as exc:
                 st.error(f"❌ Could not reach FastAPI backend webhook endpoint: {exc}")
 
-if st.session_state.analysis_result is None and view_selection not in ["📈 Executive Dashboard", "🔍 Account Inspector", "📊 Dataset Intelligence", "⚙️ Deployment Roadmap", "🌐 I4C Webhook Auditor"]:
+if st.session_state.analysis_result is None and view_selection not in ["📈 Executive Dashboard", "🔍 Account Inspector", "📊 Dataset Intelligence", "⚙️ Deployment Roadmap", "🌐 I4C Webhook Auditor", "📐 Model Metrics"]:
     render_hero_landing(_load_scenario)
