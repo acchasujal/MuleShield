@@ -1,5 +1,5 @@
 """
-FundTrace-AI — Fallback Data Generator
+MuleShield AI — Fallback Data Generator
 =======================================
 Pre-generates all backend responses as JSON files so the Streamlit
 frontend can load them if the backend or AI APIs are unavailable
@@ -271,7 +271,7 @@ def generate_qa(scenario_key: str, questions: list[str], analysis: dict, csv_pat
 def main():
     print()
     print("=" * 65)
-    print("  FundTrace-AI — Fallback Data Generator")
+    print("  MuleShield AI — Fallback Data Generator")
     print("=" * 65)
     print()
 

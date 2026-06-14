@@ -1,5 +1,5 @@
 """
-FundTrace-AI — Authentic Synthetic Banking Data Generator
+MuleShield AI — Authentic Synthetic Banking Data Generator
 Generates realistic Indian banking transaction data covering:
 - All 5 fraud patterns from PS3
 - Normal transactions for contrast
@@ -616,7 +616,7 @@ def extract_scenario_csvs(df, profiles):
 if __name__ == "__main__":
     os.makedirs("data", exist_ok=True)
 
-    print("\n🏦 FundTrace-AI Synthetic Data Generator")
+    print("\n🏦 MuleShield AI — Synthetic Data Generator")
     print("=" * 50)
 
     df, profiles = generate_all_data()
