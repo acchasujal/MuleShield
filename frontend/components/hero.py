@@ -34,46 +34,46 @@ def render_hero_landing(load_scenario_callback) -> None:
         st.markdown("""
         <div style='background-color:#0f172a;padding:16px;border-radius:6px;border:1px solid #334155;border-top:3px solid #ef4444;height:160px;'>
             <div style='display:flex;align-items:center;gap:8px;margin-bottom:8px;'>
-                <span style='background:#ef4444;color:#fff;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;'>CRITICAL</span>
+                <span style='background:#ef4444;color:#fff;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;'>HIGH</span>
             </div>
-            <div style='color:#f8fafc;font-size:14px;font-weight:600;margin-bottom:6px;'>Round-Trip Layering</div>
+            <div style='color:#f8fafc;font-size:14px;font-weight:600;margin-bottom:6px;'>Dormant Reactivation Ring</div>
             <p style='color:#94a3b8;font-size:12px;line-height:1.5;margin:0;'>
-                High-velocity circular payment loops converging to a laundering sink account.
+                G365D dormant accounts reactivated for high-volume pass-through to aggregator networks.
             </p>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Load Round-Trip Dataset", key="btn_sc_roundtrip", use_container_width=True):
-            load_scenario_callback("data/scenario_roundtrip.csv", "scenario_roundtrip.csv")
+        if st.button("Load Dormant Dataset", key="btn_sc_dormant_ring", use_container_width=True):
+            load_scenario_callback("data/scenario_dormant_reactivation.csv", "scenario_dormant_reactivation.csv")
 
     with col_sc2:
-        st.markdown("""
-        <div style='background-color:#0f172a;padding:16px;border-radius:6px;border:1px solid #334155;border-top:3px solid #f97316;height:160px;'>
-            <div style='display:flex;align-items:center;gap:8px;margin-bottom:8px;'>
-                <span style='background:#f97316;color:#fff;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;'>HIGH</span>
-            </div>
-            <div style='color:#f8fafc;font-size:14px;font-weight:600;margin-bottom:6px;'>Structuring / Smurfing</div>
-            <p style='color:#94a3b8;font-size:12px;line-height:1.5;margin:0;'>
-                Multi-leg micro-deposits structured below KYC reporting thresholds with rapid channel-switching.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("Load Structuring Dataset", key="btn_sc_structuring", use_container_width=True):
-            load_scenario_callback("data/scenario_structuring.csv", "scenario_structuring.csv")
-
-    with col_sc3:
         st.markdown("""
         <div style='background-color:#0f172a;padding:16px;border-radius:6px;border:1px solid #334155;border-top:3px solid #d97706;height:160px;'>
             <div style='display:flex;align-items:center;gap:8px;margin-bottom:8px;'>
                 <span style='background:#d97706;color:#fff;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;'>MEDIUM</span>
             </div>
-            <div style='color:#f8fafc;font-size:14px;font-weight:600;margin-bottom:6px;'>Dormant Reactivation</div>
+            <div style='color:#f8fafc;font-size:14px;font-weight:600;margin-bottom:6px;'>Student Mule Recruitment</div>
             <p style='color:#94a3b8;font-size:12px;line-height:1.5;margin:0;'>
-                Long-dormant accounts reactivated via social engineering for sudden high-volume pass-through flows.
+                College students recruited via social media to funnel funds through multi-layered UPI chains.
             </p>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Load Dormant Dataset", key="btn_sc_dormant", use_container_width=True):
-            load_scenario_callback("data/scenario_dormant.csv", "scenario_dormant.csv")
+        if st.button("Load Student Dataset", key="btn_sc_student", use_container_width=True):
+            load_scenario_callback("data/scenario_student_recruitment.csv", "scenario_student_recruitment.csv")
+
+    with col_sc3:
+        st.markdown("""
+        <div style='background-color:#0f172a;padding:16px;border-radius:6px;border:1px solid #334155;border-top:3px solid #ef4444;height:160px;'>
+            <div style='display:flex;align-items:center;gap:8px;margin-bottom:8px;'>
+                <span style='background:#ef4444;color:#fff;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;'>HIGH</span>
+            </div>
+            <div style='color:#f8fafc;font-size:14px;font-weight:600;margin-bottom:6px;'>Agri Subsidy Diversion</div>
+            <p style='color:#94a3b8;font-size:12px;line-height:1.5;margin:0;'>
+                PM-Kisan DBT disbursements funnelled through rural mule aggregators to shell entity exits.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Load Agri Dataset", key="btn_sc_agri", use_container_width=True):
+            load_scenario_callback("data/scenario_agri_diversion.csv", "scenario_agri_diversion.csv")
 
     st.markdown("<br/>", unsafe_allow_html=True)
 

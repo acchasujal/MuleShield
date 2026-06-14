@@ -13,13 +13,13 @@ logger = logging.getLogger("frontend.services.api_client")
 def _scenario_key_from_label(label: str) -> str:
     """Map a CSV filename or scenario label to the fallback key."""
     label_lower = label.lower()
-    if "roundtrip" in label_lower or "round" in label_lower:
-        return "roundtrip"
-    if "structuring" in label_lower or "smurfing" in label_lower:
-        return "structuring"
     if "dormant" in label_lower:
-        return "dormant"
-    return "roundtrip"  # safe default
+        return "dormant_reactivation"
+    if "student" in label_lower:
+        return "student_recruitment"
+    if "agri" in label_lower or "subsidy" in label_lower:
+        return "agri_diversion"
+    return "dormant_reactivation"  # safe default
 
 def load_fallback(scenario_name: str, data_type: str):
     """

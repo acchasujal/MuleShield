@@ -56,24 +56,24 @@ def render_sidebar(load_scenario_callback) -> tuple[str, str, object]:
             )
             st.markdown("<hr style='border-color:#1e293b;margin:12px 0;'/>", unsafe_allow_html=True)
             st.markdown("**Load Investigation Dataset**")
-            if st.button("Round-Trip Layering", key="sb_roundtrip", use_container_width=True):
-                load_scenario_callback("data/scenario_roundtrip.csv", "scenario_roundtrip.csv")
-            if st.button("Structuring / Smurfing", key="sb_structuring", use_container_width=True):
-                load_scenario_callback("data/scenario_structuring.csv", "scenario_structuring.csv")
-            if st.button("Dormant Reactivation", key="sb_dormant", use_container_width=True):
-                load_scenario_callback("data/scenario_dormant.csv", "scenario_dormant.csv")
+            if st.button("Dormant Reactivation Ring", key="sb_dormant_ring", use_container_width=True):
+                load_scenario_callback("data/scenario_dormant_reactivation.csv", "scenario_dormant_reactivation.csv")
+            if st.button("Student Mule Recruitment", key="sb_student", use_container_width=True):
+                load_scenario_callback("data/scenario_student_recruitment.csv", "scenario_student_recruitment.csv")
+            if st.button("Agri Subsidy Diversion", key="sb_agri", use_container_width=True):
+                load_scenario_callback("data/scenario_agri_diversion.csv", "scenario_agri_diversion.csv")
 
         elif view_selection == "Investigations":
             st.markdown("**Threat Simulation Library**")
             st.caption("Pre-loaded transaction intelligence datasets.")
-            if st.button("Round-Trip Layering", key="dm_sb_roundtrip", use_container_width=True):
-                load_scenario_callback("data/scenario_roundtrip.csv", "scenario_roundtrip.csv")
+            if st.button("Dormant Reactivation Ring", key="dm_sb_dormant_ring", use_container_width=True):
+                load_scenario_callback("data/scenario_dormant_reactivation.csv", "scenario_dormant_reactivation.csv")
                 st.session_state.demo_mode_active = True
-            if st.button("Structuring / Smurfing", key="dm_sb_structuring", use_container_width=True):
-                load_scenario_callback("data/scenario_structuring.csv", "scenario_structuring.csv")
+            if st.button("Student Mule Recruitment", key="dm_sb_student", use_container_width=True):
+                load_scenario_callback("data/scenario_student_recruitment.csv", "scenario_student_recruitment.csv")
                 st.session_state.demo_mode_active = True
-            if st.button("Dormant Reactivation", key="dm_sb_dormant", use_container_width=True):
-                load_scenario_callback("data/scenario_dormant.csv", "scenario_dormant.csv")
+            if st.button("Agri Subsidy Diversion", key="dm_sb_agri", use_container_width=True):
+                load_scenario_callback("data/scenario_agri_diversion.csv", "scenario_agri_diversion.csv")
                 st.session_state.demo_mode_active = True
 
         # System health check in sidebar (compact)

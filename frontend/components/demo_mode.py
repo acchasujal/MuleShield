@@ -13,9 +13,9 @@ def render_threat_simulation_view(load_scenario_callback) -> None:
     active_scenario = st.session_state.get("active_scenario")
     if active_scenario and st.session_state.analysis_result is not None:
         scenario_labels = {
-            "roundtrip":   ("Round-Trip Layering Loop",        "#ef4444"),
-            "structuring": ("UPI Structuring / Smurfing",      "#f97316"),
-            "dormant":     ("Dormant Account Reactivation",    "#eab308"),
+            "dormant_reactivation": ("Dormant Reactivation Ring",    "#ef4444"),
+            "student_recruitment":  ("Student Mule Recruitment",     "#f97316"),
+            "agri_diversion":       ("Agri Subsidy Diversion",       "#ef4444"),
         }
         lbl, clr = scenario_labels.get(active_scenario, ("Unknown", "#94a3b8"))
         alerts_loaded = len(st.session_state.analysis_result.get("alerts", []))
@@ -43,27 +43,27 @@ def render_threat_simulation_view(load_scenario_callback) -> None:
         st.markdown("""
         <div style='background:#0f172a;padding:20px;border-radius:8px;border:1px solid #334155;border-top:3px solid #ef4444;min-height:260px;'>
             <div style='display:flex;align-items:center;gap:8px;margin-bottom:10px;'>
-                <span style='background:#ef4444;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.05em;'>CRITICAL</span>
-                <span style='color:#64748b;font-size:10px;'>Round-Trip · Neo4j Graph</span>
+                <span style='background:#ef4444;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.05em;'>HIGH</span>
+                <span style='color:#64748b;font-size:10px;'>Dormancy · G365D Reactivation</span>
             </div>
-            <h4 style='color:#f8fafc;margin:0 0 8px 0;font-size:15px;font-weight:600;'>Round-Trip Layering Loop</h4>
+            <h4 style='color:#f8fafc;margin:0 0 8px 0;font-size:15px;font-weight:600;'>Dormant Reactivation Ring</h4>
             <p style='color:#94a3b8;font-size:12px;line-height:1.6;margin-bottom:14px;'>
-                Multi-mule circular RTGS/UPI fund loop with a laundering sink account. Detects dense graph topology and velocity anomalies.
+                A 3.5-year dormant savings account is reactivated via social engineering for high-volume NEFT pass-through to a mule aggregator, cashing out via a UPI layering ring.
             </p>
             <div style='background:#1e293b;padding:10px 12px;border-radius:4px;margin-bottom:8px;'>
                 <div style='color:#ef4444;font-size:10px;font-weight:700;text-transform:uppercase;margin-bottom:4px;letter-spacing:0.05em;'>Transaction Pattern</div>
                 <div style='color:#94a3b8;font-size:11px;line-height:1.7;font-family:monospace;'>
-                    Input A → Input B → Input C<br/>
-                    ↓ (converge)<br/>
-                    Sink: ₹38.5L RTGS<br/>
-                    ↩ Loop via IMPS
+                    G365D Dormant Account<br/>
+                    ↓ Reactivation NEFTs<br/>
+                    Mule Aggregator Node<br/>
+                    ↓ 4-Node Fan-Out
                 </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Load Round-Trip Pattern", key="dm_launch_roundtrip", use_container_width=True):
-            with st.spinner("Loading Round-Trip Layering dataset..."):
-                load_scenario_callback("data/scenario_roundtrip.csv", "scenario_roundtrip.csv")
+        if st.button("Load Dormant Pattern", key="dm_launch_dormant_ring", use_container_width=True):
+            with st.spinner("Loading Dormant Reactivation dataset..."):
+                load_scenario_callback("data/scenario_dormant_reactivation.csv", "scenario_dormant_reactivation.csv")
             st.session_state.demo_mode_active = True
             st.rerun()
 
@@ -71,55 +71,55 @@ def render_threat_simulation_view(load_scenario_callback) -> None:
         st.markdown("""
         <div style='background:#0f172a;padding:20px;border-radius:8px;border:1px solid #334155;border-top:3px solid #f97316;min-height:260px;'>
             <div style='display:flex;align-items:center;gap:8px;margin-bottom:10px;'>
-                <span style='background:#f97316;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.05em;'>HIGH</span>
-                <span style='color:#64748b;font-size:10px;'>Structuring · SMOTE Detection</span>
+                <span style='background:#f97316;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.05em;'>MEDIUM</span>
+                <span style='color:#64748b;font-size:10px;'>Student Mule Network</span>
             </div>
-            <h4 style='color:#f8fafc;margin:0 0 8px 0;font-size:15px;font-weight:600;'>UPI Structuring / Smurfing</h4>
+            <h4 style='color:#f8fafc;margin:0 0 8px 0;font-size:15px;font-weight:600;'>Student Mule Recruitment</h4>
             <p style='color:#94a3b8;font-size:12px;line-height:1.6;margin-bottom:14px;'>
-                28 micro-deposits below ₹50,000 KYC threshold via rapid UPI/IMPS channel-switching to evade rule-based detection.
+                College students recruited via social media. Controller seeds accounts via UPI over 77 minutes to evade velocity limits, funnelling through layering node.
             </p>
             <div style='background:#1e293b;padding:10px 12px;border-radius:4px;margin-bottom:8px;'>
                 <div style='color:#f97316;font-size:10px;font-weight:700;text-transform:uppercase;margin-bottom:4px;letter-spacing:0.05em;'>Transaction Pattern</div>
                 <div style='color:#94a3b8;font-size:11px;line-height:1.7;font-family:monospace;'>
-                    28× UPI ₹49,999 deposits<br/>
-                    ↓ Channel Switch: UPI→IMPS<br/>
-                    ↓ Consolidator node<br/>
-                    Bulk NEFT withdrawal
+                    Recruiter Controller<br/>
+                    ↓ UPI × 6<br/>
+                    6 Student Mules<br/>
+                    ↓ Layering Exit
                 </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Load Structuring Pattern", key="dm_launch_structuring", use_container_width=True):
-            with st.spinner("Loading Structuring / Smurfing dataset..."):
-                load_scenario_callback("data/scenario_structuring.csv", "scenario_structuring.csv")
+        if st.button("Load Student Pattern", key="dm_launch_student", use_container_width=True):
+            with st.spinner("Loading Student Recruitment dataset..."):
+                load_scenario_callback("data/scenario_student_recruitment.csv", "scenario_student_recruitment.csv")
             st.session_state.demo_mode_active = True
             st.rerun()
 
     with col_d3:
         st.markdown("""
-        <div style='background:#0f172a;padding:20px;border-radius:8px;border:1px solid #334155;border-top:3px solid #d97706;min-height:260px;'>
+        <div style='background:#0f172a;padding:20px;border-radius:8px;border:1px solid #334155;border-top:3px solid #ef4444;min-height:260px;'>
             <div style='display:flex;align-items:center;gap:8px;margin-bottom:10px;'>
-                <span style='background:#d97706;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.05em;'>MEDIUM</span>
-                <span style='color:#64748b;font-size:10px;'>Dormancy · G365D Bucket</span>
+                <span style='background:#ef4444;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.05em;'>HIGH</span>
+                <span style='color:#64748b;font-size:10px;'>Subsidy Diversion</span>
             </div>
-            <h4 style='color:#f8fafc;margin:0 0 8px 0;font-size:15px;font-weight:600;'>Dormant Account Reactivation</h4>
+            <h4 style='color:#f8fafc;margin:0 0 8px 0;font-size:15px;font-weight:600;'>Agri Subsidy Diversion</h4>
             <p style='color:#94a3b8;font-size:12px;line-height:1.6;margin-bottom:14px;'>
-                Fraudsters recruit G365D age-bucket dormant student/agri profiles via social engineering for sudden high-volume pass-through laundering.
+                PM-Kisan DBT disbursements meant for 10 rural farmers in Aurangabad are diverted to an aggregator, then layered through Pune to a Mumbai shell entity.
             </p>
             <div style='background:#1e293b;padding:10px 12px;border-radius:4px;margin-bottom:8px;'>
-                <div style='color:#d97706;font-size:10px;font-weight:700;text-transform:uppercase;margin-bottom:4px;letter-spacing:0.05em;'>Transaction Pattern</div>
+                <div style='color:#ef4444;font-size:10px;font-weight:700;text-transform:uppercase;margin-bottom:4px;letter-spacing:0.05em;'>Transaction Pattern</div>
                 <div style='color:#94a3b8;font-size:11px;line-height:1.7;font-family:monospace;'>
-                    Dormant profile reset<br/>
-                    ↓ Test: ₹10,000 UPI<br/>
-                    ↓ Surge: ₹25L NEFT within 24h<br/>
-                    Digital channel block
+                    10× PM-Kisan DBT<br/>
+                    ↓ Immediate Diversion<br/>
+                    Pune/Mumbai Layering<br/>
+                    ↓ Shell Entity RTGS
                 </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Load Dormant Pattern", key="dm_launch_dormant", use_container_width=True):
-            with st.spinner("Loading Dormant Reactivation dataset..."):
-                load_scenario_callback("data/scenario_dormant.csv", "scenario_dormant.csv")
+        if st.button("Load Agri Pattern", key="dm_launch_agri", use_container_width=True):
+            with st.spinner("Loading Agri Subsidy dataset..."):
+                load_scenario_callback("data/scenario_agri_diversion.csv", "scenario_agri_diversion.csv")
             st.session_state.demo_mode_active = True
             st.rerun()
 
