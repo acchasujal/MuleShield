@@ -1,6 +1,6 @@
 # frontend/components/model_metrics.py
 """
-MuleShield AI — Model Evaluation Metrics Panel
+MuleShield AML — Model Evaluation Metrics Panel
 
 Displays XGBoost model performance metrics derived from evaluate_model.py
 on the DataSet.csv 80/20 validation split.
@@ -22,19 +22,19 @@ import streamlit as st
 # These are NOT fabricated — they are the output of scripts/evaluate_model.py.
 # ---------------------------------------------------------------------------
 _STATIC_METRICS = {
-    "Precision":  0.8000,
-    "Recall":     1.0000,
-    "F1-Score":   0.8889,
-    "PR-AUC":     1.0000,
-    "ROC-AUC":    1.0000,
+    "Precision": 0.8000,
+    "Recall":    1.0000,
+    "F1-Score":  0.8889,
+    "PR-AUC":    1.0000,
+    "ROC-AUC":   1.0000,
 }
 
 # Confusion matrix from the same validation run (1817 val rows, 16 mules)
 _CM = {
-    "TP": 16,   # True Positives  (Mule correctly flagged)
-    "FP": 4,    # False Positives (Legitimate incorrectly flagged)
-    "TN": 1797, # True Negatives  (Legitimate correctly cleared)
-    "FN": 0,    # False Negatives (Mule missed)
+    "TP": 16,    # True Positives  (Mule correctly flagged)
+    "FP": 4,     # False Positives (Legitimate incorrectly flagged)
+    "TN": 1797,  # True Negatives  (Legitimate correctly cleared)
+    "FN": 0,     # False Negatives (Mule missed)
 }
 
 _ARTIFACTS_DIR = "backend/ml_artifacts"
@@ -42,13 +42,13 @@ _ARTIFACTS_DIR = "backend/ml_artifacts"
 
 def render_model_metrics_view() -> None:
     """Renders the Model Evaluation Metrics page."""
-    st.subheader("📐 XGBoost Model Evaluation Metrics")
-    st.markdown(
-        "Performance on a **20% hold-out validation split** of `DataSet.csv` "
-        "(1,817 rows · stratified · SMOTE applied to training split only)."
+    st.subheader("Model Analytics")
+    st.caption(
+        "XGBoost model performance on the 20% hold-out validation split of DataSet.csv "
+        "(1,817 rows — stratified — SMOTE applied to training split only)."
     )
     st.info(
-        "ℹ️ These metrics reflect the committed model artifacts. "
+        "These metrics reflect the committed model artifacts. "
         "Run `python scripts/evaluate_model.py` to regenerate on a fresh split."
     )
 
@@ -65,10 +65,10 @@ def render_model_metrics_view() -> None:
         color = colors[metric]
         col.markdown(
             f"""
-            <div style='background:#1e293b;padding:14px 10px;border-radius:8px;
+            <div style='background:#1e293b;padding:14px 10px;border-radius:6px;
                         border-left:4px solid {color};text-align:center;'>
-                <div style='color:#94a3b8;font-size:11px;text-transform:uppercase;'>{metric}</div>
-                <div style='color:#f8fafc;font-size:26px;font-weight:bold;'>{value:.4f}</div>
+                <div style='color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;'>{metric}</div>
+                <div style='color:#f8fafc;font-size:26px;font-weight:700;'>{value:.4f}</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -80,7 +80,7 @@ def render_model_metrics_view() -> None:
     col_cm, col_fi = st.columns([1, 2])
 
     with col_cm:
-        st.markdown("#### 🔢 Confusion Matrix")
+        st.markdown("**Confusion Matrix**")
         cm_data = [
             [_CM["TN"], _CM["FP"]],
             [_CM["FN"], _CM["TP"]],
@@ -89,11 +89,11 @@ def render_model_metrics_view() -> None:
             data=go.Heatmap(
                 z=cm_data,
                 x=["Predicted Legitimate", "Predicted Mule"],
-                y=["Actual Legitimate", "Actual Mule"],
+                y=["Actual Legitimate",    "Actual Mule"],
                 colorscale=[
-                    [0.0, "#0f172a"],
+                    [0.0,   "#0f172a"],
                     [0.001, "#1e3a5f"],
-                    [1.0, "#2563eb"],
+                    [1.0,   "#2563eb"],
                 ],
                 text=[[str(v) for v in row] for row in cm_data],
                 texttemplate="%{text}",
@@ -116,7 +116,7 @@ def render_model_metrics_view() -> None:
         )
 
     with col_fi:
-        st.markdown("#### 📊 Top-20 Feature Importances (XGBoost gain)")
+        st.markdown("**Top-20 Feature Importances (XGBoost gain)**")
         fi_path = os.path.join(_ARTIFACTS_DIR, "feature_importances.csv")
         if os.path.exists(fi_path):
             fi_df = pd.read_csv(fi_path).nlargest(20, "importance").sort_values("importance")
@@ -145,10 +145,10 @@ def render_model_metrics_view() -> None:
 
     # ── Class imbalance note ─────────────────────────────────────────────────
     st.markdown("---")
-    st.markdown("#### ⚖️ Class Imbalance Context")
+    st.markdown("**Class Imbalance Resolution**")
     c1, c2, c3 = st.columns(3)
     c1.metric("Total Accounts", "9,082")
-    c2.metric("Legitimate", "9,001 (99.1%)")
+    c2.metric("Legitimate",     "9,001 (99.1%)")
     c3.metric("Mule (minority)", "81 (0.9%)")
     st.caption(
         "Imbalance corrected with **SMOTE** on training split only "
