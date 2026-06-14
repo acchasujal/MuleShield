@@ -4,33 +4,92 @@ import pandas as pd
 from fastapi import APIRouter, HTTPException, UploadFile, File, Request
 from pydantic import BaseModel
 from backend.ml_service import MLService
-from backend.risk_scoring import calculate_composite_risk, assign_tier, align_lifecycle_stage
+from backend.risk_scoring import (
+    calculate_composite_risk, assign_tier, align_lifecycle_stage,
+    derive_behavioral_txn_score,
+)
 
 logger = logging.getLogger("muleshield.router")
 
 async def background_graph_seed(graph_service, df_raw):
-    """Asynchronously seeds simulated transactions into Neo4j to build topological context."""
+    """Asynchronously seeds a realistic mule-network topology into Neo4j.
+
+    Topology:
+        - HIGH risk (F115 > 0.7 or F886 > 0.5): seeded into a ring structure
+          to simulate circular fund layering.
+        - MEDIUM risk (F115 > 0.3): two-hop chain → dispersal hub → sink.
+        - LOW risk: connected to a near-neighbour legitimate account.
+
+    Three sink nodes are used instead of one to avoid a single centrality
+    dominator that would corrupt graph intelligence.
+    """
     if not graph_service or not graph_service.is_connected:
         return
     try:
         logger.info(f"Triggering background Neo4j graph seeding for {len(df_raw)} profiles...")
-        # Create a mock transactional DataFrame that conforms to graph_service.seed_batch_transactions
+        SINKS = [
+            "ACC05299999999990",  # Sink A
+            "ACC05299999999991",  # Sink B
+            "ACC05299999999992",  # Sink C
+        ]
+        HUBS = [
+            "ACC05299999999980",  # Dispersal hub 1
+            "ACC05299999999981",  # Dispersal hub 2
+        ]
+
         txn_records = []
-        for idx, row in df_raw.head(1000).iterrows(): # Limit to 1000 records to prevent bottlenecks
+        ring_candidates = []
+        medium_candidates = []
+
+        for idx, row in df_raw.head(1000).iterrows():
             raw_id = row.get("Unnamed: 0", idx + 1)
-            from_acc = f"ACC052{str(raw_id).zfill(11)}"
-            to_acc = "ACC05299999999999" # Central consolidation node
-            amount = float(row.get("F2578", 50000)) if not pd.isnull(row.get("F2578")) else 50000
+            acc_id = f"ACC052{str(raw_id).zfill(11)}"
+            amount = float(row.get("F2578", 50000)) if not pd.isnull(row.get("F2578", None)) else 50000
             timestamp = pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")
             channel = "UPI" if row.get("F886", 0) > 0.15 else "NEFT"
+
+            f115 = float(row.get("F115", 0) or 0)
+            f886 = float(row.get("F886", 0) or 0)
+
+            if f115 > 0.7 or f886 > 0.5:
+                ring_candidates.append((acc_id, amount, timestamp, channel))
+            elif f115 > 0.3:
+                medium_candidates.append((acc_id, amount, timestamp, channel))
+            else:
+                # LOW risk: connect to the next legitimate account (near-neighbour)
+                next_id = f"ACC052{str(int(raw_id) + 1).zfill(11)}"
+                txn_records.append({
+                    "from_account": acc_id, "to_account": next_id,
+                    "amount": amount, "timestamp": timestamp, "channel": channel,
+                })
+
+        # Build ring from high-risk candidates
+        for i, (acc_id, amount, timestamp, channel) in enumerate(ring_candidates):
+            next_acc = ring_candidates[(i + 1) % len(ring_candidates)][0] if len(ring_candidates) > 1 else HUBS[0]
             txn_records.append({
-                "from_account": from_acc,
-                "to_account": to_acc,
-                "amount": amount,
-                "timestamp": timestamp,
-                "channel": channel
+                "from_account": acc_id, "to_account": next_acc,
+                "amount": amount, "timestamp": timestamp, "channel": channel,
             })
-        
+            # Each ring member also drains to a sink
+            sink = SINKS[int(raw_id) % len(SINKS)]
+            txn_records.append({
+                "from_account": acc_id, "to_account": sink,
+                "amount": amount * 0.9, "timestamp": timestamp, "channel": channel,
+            })
+
+        # Build two-hop chains for medium-risk: account → hub → sink
+        for i, (acc_id, amount, timestamp, channel) in enumerate(medium_candidates):
+            hub = HUBS[i % len(HUBS)]
+            sink = SINKS[i % len(SINKS)]
+            txn_records.append({
+                "from_account": acc_id, "to_account": hub,
+                "amount": amount, "timestamp": timestamp, "channel": channel,
+            })
+            txn_records.append({
+                "from_account": hub, "to_account": sink,
+                "amount": amount * 0.95, "timestamp": timestamp, "channel": channel,
+            })
+
         df_txn = pd.DataFrame(txn_records)
         await graph_service.seed_batch_transactions(df_txn)
     except Exception as exc:
@@ -116,10 +175,14 @@ async def predict_single(body: SinglePredictionRequest, request: Request):
             logger.warning(f"Neo4j single GDS lookup failed: {exc}. Reverting to Standalone ML fallback.")
             graph_score = ml_score
     
-    # Fusion Composite risk score (No transaction context in baseline lookup -> txn_score = 0.0)
-    composite_score = calculate_composite_risk(ml_score, graph_score, 0.0)
+    # Derive behavioral transaction risk from BOI profile features
+    # (replaces the hardcoded 0.0 that prevented mule accounts from reaching CRITICAL)
+    behav_txn_score = derive_behavioral_txn_score(features)
+
+    # Fusion Composite risk score
+    composite_score = calculate_composite_risk(ml_score, graph_score, behav_txn_score)
     severity = assign_tier(composite_score)
-    mule_stage = align_lifecycle_stage(pred["mule_stage"], severity, 0.0)
+    mule_stage = align_lifecycle_stage(pred["mule_stage"], severity, behav_txn_score)
 
     # Generate case reference and auto-goAML compliant XML if critical / high risk
     import random
@@ -204,7 +267,7 @@ async def predict_single(body: SinglePredictionRequest, request: Request):
         goaml_xml=goaml_xml,
         case_id=case_id,
         profile_risk=round(ml_score * 100.0, 2),
-        transaction_risk=0.0,
+        transaction_risk=round(behav_txn_score, 2),
         graph_risk=round(graph_score * 100.0, 2)
     )
 
@@ -309,10 +372,12 @@ async def predict_batch(request: Request, file: UploadFile = File(...)):
             if graph_score == 0.0:
                 graph_score = ml_score
 
-            # Score Fusion layer
-            composite_score = calculate_composite_risk(ml_score, graph_score, 0.0)
+            # Score Fusion layer — derive behavioral txn score from BOI profile features
+            raw_row_dict = row.to_dict()
+            behav_txn_score = derive_behavioral_txn_score(raw_row_dict)
+            composite_score = calculate_composite_risk(ml_score, graph_score, behav_txn_score)
             severity = assign_tier(composite_score)
-            mule_stage = align_lifecycle_stage(pred["mule_stage"], severity, 0.0)
+            mule_stage = align_lifecycle_stage(pred["mule_stage"], severity, behav_txn_score)
 
             # Map the top-5 feature significance indices to human-readable explanations
             reasons = []
