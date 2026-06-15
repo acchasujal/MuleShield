@@ -98,6 +98,7 @@ def run_health_check() -> int:
         try:
             import asyncio
             from sqlalchemy.ext.asyncio import create_async_engine
+            from sqlalchemy import text
             pg_user = os.getenv("POSTGRES_USER", "postgres")
             pg_pass = os.getenv("POSTGRES_PASSWORD", "postgres")
             pg_db = os.getenv("POSTGRES_DB", "muleshield")
@@ -106,7 +107,7 @@ def run_health_check() -> int:
             
             async def test_conn():
                 async with engine.connect() as conn:
-                    await conn.execute("SELECT 1")
+                    await conn.execute(text("SELECT 1"))
             
             asyncio.run(test_conn())
             print_result("PostgreSQL Database", "PASS", f"Connected to postgres@{pg_host}:{pg_port}/{pg_db}.")
