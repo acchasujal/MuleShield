@@ -1,7 +1,6 @@
 # MuleShield AI — PPT Content (5-6 Slides)
 
 **PSBs Cybersecurity, Fraud & AI Hackathon 2026 · PS-2 · Bank of India + IIT Hyderabad**
-**Team BRUH**
 
 *Optimized for shortlisting — maximum impact in minimum slides.*
 
@@ -307,9 +306,9 @@ India's first automated mule containment system deployed nationally across 5,000
 MuleShield as the reference architecture for all 12 PSBs. A federated intelligence network where a mule flagged at one bank triggers alerts across all others — without transferring a single byte of raw data. India's PSBs, coordinated for the first time against a common financial crime threat.
 
 **CLOSING LINE (gold, centered):**
-> **Team BRUH. Built. Tested. Ready for the pilot.**
+> **Built. Tested. Ready for the pilot.**
 
-**BOTTOM:** Team photo · K J Somaiya School of Engineering · github.com/acchasujal/MuleShield
+**BOTTOM:** github.com/acchasujal/MuleShield
 
 ### Recommended Visual
 Dark background. India map with 12 PSB location nodes connected in a network — BOI as the highlighted gold origin node. Network lines between PSBs. Gold headline text. Team strip at bottom.

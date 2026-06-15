@@ -2,10 +2,6 @@
 
 **PSBs Cybersecurity, Fraud & AI Hackathon 2026 · Problem Statement 2**
 **Bank of India + IIT Hyderabad**
-
-**Team BRUH** · Shriraj Dyaram · Vikram Sindra · Sujal Gupta · Dhiren Mulwani
-K J Somaiya School of Engineering, Mumbai
-
 Repository: github.com/acchasujal/MuleShield
 
 ---
@@ -639,7 +635,7 @@ By combining XGBoost classification on BOI's actual 9,082-account dataset, Neo4j
 
 The system is not a prototype. It is a working, deployable application ready for the 90-day BOI pilot.
 
-**Team BRUH. Built. Tested. Ready.**
+**Built. Tested. Ready.**
 
 ---
 

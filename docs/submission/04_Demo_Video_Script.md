@@ -1,7 +1,6 @@
 # MuleShield AI — Demo Video Script (3:30)
 
 **PSBs Cybersecurity, Fraud & AI Hackathon 2026 · PS-2 · Bank of India + IIT Hyderabad**
-**Team BRUH**
 
 *Total Runtime: 3 minutes 30 seconds*
 *Tone: Banking product presentation — confident, precise, institutional*
@@ -238,7 +237,6 @@
 ### Screen Content
 - Mrs. Sharma's story recap: complaint at 10:14:00 → flagged at 10:14:04 → ₹1.9L protected
 - MuleShield logo on dark background
-- "Team BRUH · K J Somaiya School of Engineering"
 - "Built. Tested. Ready."
 - GitHub repo: github.com/acchasujal/MuleShield
 
