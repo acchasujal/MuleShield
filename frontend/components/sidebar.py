@@ -3,6 +3,10 @@
 import requests
 import streamlit as st
 from frontend.utils.constants import BASE_URL
+from frontend.utils.demo_registry import (
+    DEMO_CRITICAL_ACCOUNT, DEMO_I4C_ACCOUNT, DEMO_I4C_REF, 
+    DEMO_SCENARIO_PATH, DEMO_SCENARIO_LABEL
+)
 
 def render_sidebar(load_scenario_callback) -> tuple[str, str, object]:
     """Renders the professional sidebar navigation panel. Returns (view_selection, target_account_id, uploaded_file)."""
@@ -37,7 +41,9 @@ def render_sidebar(load_scenario_callback) -> tuple[str, str, object]:
         st.markdown("<hr style='border-color:#1e293b;margin:12px 0;'/>", unsafe_allow_html=True)
 
         uploaded_file = None
-        target_account_id = "ACC0520000000028"
+        
+        # Override target_account_id if demo mode is active and set
+        target_account_id = st.session_state.get("inspected_account_id", DEMO_CRITICAL_ACCOUNT)
 
         if view_selection == "Alerts":
             st.markdown("**Data Input**")
@@ -51,9 +57,12 @@ def render_sidebar(load_scenario_callback) -> tuple[str, str, object]:
             st.markdown("**Account Lookup**")
             target_account_id = st.text_input(
                 "Account ID",
-                value="ACC0520000000028",
+                value=target_account_id,
                 help="Enter Account ID (e.g. ACC0520000000028 to ACC0520000009082).",
             )
+            # Make sure session state tracks manual input changes
+            st.session_state.inspected_account_id = target_account_id
+
             st.markdown("<hr style='border-color:#1e293b;margin:12px 0;'/>", unsafe_allow_html=True)
             st.markdown("**Load Investigation Dataset**")
             if st.button("Dormant Reactivation Ring", key="sb_dormant_ring", use_container_width=True):
@@ -78,6 +87,8 @@ def render_sidebar(load_scenario_callback) -> tuple[str, str, object]:
 
         # System health check in sidebar (compact)
         st.markdown("<hr style='border-color:#1e293b;margin:12px 0;'/>", unsafe_allow_html=True)
+
+
         if st.button("System Health Check", key="btn_check_health"):
             try:
                 r = requests.get(f"{BASE_URL}/health", timeout=5)

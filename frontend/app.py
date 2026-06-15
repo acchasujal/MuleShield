@@ -11,6 +11,7 @@ import streamlit as st
 from datetime import datetime, timezone
 
 from frontend.utils.constants import SEVERITY_EMOJI, BASE_URL
+from frontend.utils.demo_registry import DEMO_I4C_ACCOUNT, DEMO_I4C_REF
 from frontend.utils.formatting import _fmt_amount
 from frontend.services.api_client import run_analysis, _scenario_key_from_label, load_fallback
 from frontend.components.sidebar import render_sidebar
@@ -308,8 +309,8 @@ elif view_selection == "I4C Intelligence":
     st.markdown("#### Ingest Cybercrime Portal Alert")
     col_sim1, col_sim2 = st.columns(2)
     with col_sim1:
-        sim_acc = st.text_input("Target Account ID:", value="ACC0520000000028")
-        sim_ref = st.text_input("I4C Portal Complaint Reference:", value="I4C-2026-8819")
+        sim_acc = st.text_input("Target Account ID:", value=DEMO_I4C_ACCOUNT)
+        sim_ref = st.text_input("I4C Portal Complaint Reference:", value=DEMO_I4C_REF)
     with col_sim2:
         sim_type = st.selectbox("Threat Alert Classification:", ["Dormant Reactivation", "UPI Velocity Pass-Through", "Watchlist Match", "High-Vulnerability Demographic Profile Match"])
 
