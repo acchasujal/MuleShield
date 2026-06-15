@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import math
 import pandas as pd
 from fastapi import APIRouter, HTTPException, UploadFile, File, Request
 from pydantic import BaseModel
@@ -10,6 +11,25 @@ from backend.risk_scoring import (
 )
 
 logger = logging.getLogger("muleshield.router")
+
+
+def _sf(val, fallback: float = 0.0) -> float:
+    """Sanitize a numeric value to a JSON-safe finite Python float.
+
+    Converts NaN, Infinity, -Infinity, and numpy scalars to ``fallback``.
+    Called only at the JSON response boundary — never modifies business logic.
+    """
+    try:
+        v = float(val)
+        return v if math.isfinite(v) else fallback
+    except (TypeError, ValueError):
+        return fallback
+
+
+def _sanitize_shap(shap_dict: dict) -> dict:
+    """Return a copy of shap_dict with all values sanitized to finite floats."""
+    return {k: _sf(v) for k, v in (shap_dict or {}).items()}
+
 
 async def background_graph_seed(graph_service, df_raw):
     """Asynchronously seeds a realistic mule-network topology into Neo4j.
@@ -258,18 +278,19 @@ async def predict_single(body: SinglePredictionRequest, request: Request):
 
     return SinglePredictionResponse(
         account=str(account_id),
-        ml_score=round(ml_score * 100.0, 2),
-        graph_score=round(graph_score * 100.0, 2),
-        composite_score=composite_score,
+        ml_score=round(_sf(ml_score) * 100.0, 2),
+        graph_score=round(_sf(graph_score) * 100.0, 2),
+        composite_score=_sf(composite_score),
         severity=severity,
         mule_stage=mule_stage,
-        shap_signals=pred["shap_signals"],
+        shap_signals=_sanitize_shap(pred["shap_signals"]),
         goaml_xml=goaml_xml,
         case_id=case_id,
-        profile_risk=round(ml_score * 100.0, 2),
-        transaction_risk=round(behav_txn_score, 2),
-        graph_risk=round(graph_score * 100.0, 2)
+        profile_risk=round(_sf(ml_score) * 100.0, 2),
+        transaction_risk=round(_sf(behav_txn_score), 2),
+        graph_risk=round(_sf(graph_score) * 100.0, 2)
     )
+
 
 @router.post("/predict/batch")
 async def predict_batch(request: Request, file: UploadFile = File(...)):
@@ -397,7 +418,9 @@ async def predict_batch(request: Request, file: UploadFile = File(...)):
             for feature, shap_val in pred["shap_signals"].items():
                 reasons.append(feature)
                 desc = translation_map.get(feature, f"Elevated weight anomaly detected in feature {feature}")
-                explanations.append(f"{desc} (+{abs(int(shap_val * 100))} pts)")
+                safe_val = _sf(shap_val)
+                explanations.append(f"{desc} (+{abs(int(safe_val * 100))} pts)")
+
 
             # Dynamic Slicing: Omit XML compliance overhead for low risk accounts
             goaml_xml = ""
@@ -408,8 +431,10 @@ async def predict_batch(request: Request, file: UploadFile = File(...)):
             if severity in ["MEDIUM", "HIGH", "CRITICAL"]:
                 case_id = f"STR-{datetime.now(timezone.utc).strftime('%Y%m%d')}-{random.randint(1000, 9999)}"
                 
-                # Format evidence list
-                amount = float(row.get("F2578", 50000)) if not pd.isnull(row.get("F2578")) else 50000
+                # Format evidence list — sanitize F2578 which may be NaN in the dataset
+                f2578_raw = row.get("F2578")
+                amount = _sf(f2578_raw, fallback=50000.0) if (f2578_raw is not None and not pd.isnull(f2578_raw)) else 50000.0
+
                 evidence.append({
                     "from_account": account_id,
                     "from_name": f"Customer #{raw_id}",
@@ -454,7 +479,7 @@ async def predict_batch(request: Request, file: UploadFile = File(...)):
 
             alerts.append({
                 "account": account_id,
-                "risk_score": composite_score,
+                "risk_score": _sf(composite_score),
                 "severity": severity,
                 "reasons": reasons,
                 "explanation": " | ".join(explanations),
@@ -464,6 +489,7 @@ async def predict_batch(request: Request, file: UploadFile = File(...)):
                 "case_id": case_id,
                 "evidence_hash": evidence_hash
             })
+
 
         # Trigger PostgreSQL bulk write
         if bulk_audits:

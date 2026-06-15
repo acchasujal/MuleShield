@@ -5,10 +5,33 @@ No scoring logic. No model loading (receives explainer from predictor).
 """
 
 import logging
+import math
 import shap
 import pandas as pd
 
 logger = logging.getLogger("muleshield.ml.shap")
+
+
+def _safe_float(val, fallback: float = 0.0) -> float:
+    """Convert any numeric value to a JSON-safe Python float.
+
+    Converts numpy scalars, NaN, Infinity, and -Infinity to a safe fallback.
+    Preserves all finite real values exactly.
+
+    Args:
+        val:      Any numeric value (numpy scalar, float, int, etc.).
+        fallback: Value to use when val is non-finite. Default 0.0.
+
+    Returns:
+        A finite Python float safe for JSON serialization.
+    """
+    try:
+        v = float(val)
+        if math.isfinite(v):
+            return v
+        return fallback
+    except (TypeError, ValueError):
+        return fallback
 
 
 class SHAPEngine:
@@ -53,16 +76,21 @@ class SHAPEngine:
                 vals = shap_vals[0]
 
             attributions = dict(zip(self.feature_names, vals))
-            sorted_attrs = sorted(attributions.items(), key=lambda x: abs(x[1]), reverse=True)
+            sorted_attrs = sorted(attributions.items(), key=lambda x: abs(_safe_float(x[1])), reverse=True)
             top_5 = sorted_attrs[:5]
-            return {feature: float(val) for feature, val in top_5}
+            return {feature: _safe_float(val) for feature, val in top_5}
 
         except Exception as exc:
             logger.error(f"Failed to generate SHAP signals: {exc}")
             # Fallback to static importances on SHAP failure
-            return dict(
-                sorted(self.feature_importances.items(), key=lambda x: abs(x[1]), reverse=True)[:5]
-            )
+            return {
+                k: _safe_float(v)
+                for k, v in sorted(
+                    self.feature_importances.items(),
+                    key=lambda x: abs(_safe_float(x[1])),
+                    reverse=True,
+                )[:5]
+            }
 
     def get_static_top5(self) -> dict:
         """Return top-5 features by static importance (for batch speed optimisation).
@@ -72,6 +100,11 @@ class SHAPEngine:
         Returns:
             Dict of {feature_name: importance_value} for top-5 features.
         """
-        return dict(
-            sorted(self.feature_importances.items(), key=lambda x: abs(x[1]), reverse=True)[:5]
-        )
+        return {
+            k: _safe_float(v)
+            for k, v in sorted(
+                self.feature_importances.items(),
+                key=lambda x: abs(_safe_float(x[1])),
+                reverse=True,
+            )[:5]
+        }

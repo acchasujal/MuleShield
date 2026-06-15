@@ -4,6 +4,8 @@ Computes composite risk scores from ML, graph, and transaction signals.
 No model loading. No ML inference.
 """
 
+import math
+
 # ---------------------------------------------------------------------------
 # Fusion v5 Weights — frozen, never modify without architecture board approval
 # ---------------------------------------------------------------------------
@@ -116,10 +118,19 @@ def calculate_composite_risk(
     Returns:
         Rounded composite risk score [0.0, 100.0].
     """
-    ml_val    = (ml_score or 0.0) * 100.0
-    graph_val = (ml_score if graph_score is None else (graph_score or 0.0)) * 100.0
+    # Sanitize inputs — NaN or Infinity from any upstream source must not propagate
+    def _fv(v, default=0.0):
+        try:
+            f = float(v)
+            return f if math.isfinite(f) else default
+        except (TypeError, ValueError):
+            return default
 
-    fused   = (ml_val * PROFILE_WEIGHT) + (txn_score * TRANSACTION_WEIGHT) + (graph_val * GRAPH_WEIGHT)
+    ml_val    = _fv(ml_score or 0.0) * 100.0
+    graph_val = (_fv(ml_score or 0.0) if graph_score is None else _fv(graph_score or 0.0)) * 100.0
+    txn_val   = _fv(txn_score)
+
+    fused   = (ml_val * PROFILE_WEIGHT) + (txn_val * TRANSACTION_WEIGHT) + (graph_val * GRAPH_WEIGHT)
     clamped = min(max(fused, 0.0), 100.0)
     rounded = round(clamped, 1)
     return 0.1 if clamped > 0.0 and rounded == 0.0 else rounded

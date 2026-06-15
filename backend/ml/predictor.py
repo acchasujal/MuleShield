@@ -7,6 +7,7 @@ No business logic. No lifecycle staging. No fusion scoring.
 
 import json
 import logging
+import math
 import os
 import pickle
 
@@ -19,6 +20,15 @@ from .lifecycle_engine import classify_mule_stage
 from .schemas import SinglePrediction, BatchPredictionRow
 
 logger = logging.getLogger("muleshield.ml.predictor")
+
+
+def _safe_float(val: float, fallback: float = 0.0) -> float:
+    """Return a finite Python float, replacing NaN/inf with fallback."""
+    try:
+        v = float(val)
+        return v if math.isfinite(v) else fallback
+    except (TypeError, ValueError):
+        return fallback
 
 _FALLBACK_PREDICTION = SinglePrediction(
     ml_score=0.55,
@@ -166,7 +176,7 @@ class MLPredictor:
             df = pd.DataFrame([raw_features])
             df_processed = self._preprocess_features(df)
 
-            prob = float(self.model.predict_proba(df_processed)[0][1])
+            prob = _safe_float(self.model.predict_proba(df_processed)[0][1], fallback=0.5)
             mule_stage   = classify_mule_stage(raw_features, prob * 100.0)
             shap_signals = self._shap_engine.generate_shap_signals(df_processed)
 
@@ -202,7 +212,7 @@ class MLPredictor:
             batch_results = []
             for idx, prob in enumerate(probs):
                 raw_row   = df_raw.iloc[idx].to_dict()
-                prob_val  = float(prob)
+                prob_val  = _safe_float(prob, fallback=0.5)
                 mule_stage = classify_mule_stage(raw_row, prob_val * 100.0)
 
                 batch_results.append({
