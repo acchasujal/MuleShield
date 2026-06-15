@@ -78,3 +78,9 @@ data/legacy/
 # --- Frontend Node Dependencies (if any) ---
 node_modules/
 package-lock.json
+
+# --- Excluded Libraries, Archives, and Reports ---
+lib/
+docs/archive/
+DOCUMENTATION_CONSOLIDATION_REPORT.md
+docs/DOCS_CLEANUP_REPORT.md
