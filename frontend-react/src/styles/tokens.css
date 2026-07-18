@@ -1,0 +1,123 @@
+/* ============================================================
+   MuleShield Design Tokens
+   Single source of truth for all visual values.
+   All other CSS files consume these variables exclusively.
+   ============================================================ */
+
+:root {
+  /* ── Color: Backgrounds ──────────────────────────────────── */
+  --color-bg:               #0a0b0d;
+  --color-surface:          #141519;
+  --color-surface-raised:   #1b1d22;
+  --color-surface-subtle:   #101114;
+
+  /* ── Color: Borders ─────────────────────────────────────── */
+  --color-border:           rgba(255, 255, 255, 0.08);
+  --color-border-strong:    rgba(255, 255, 255, 0.14);
+  --color-border-subtle:    rgba(255, 255, 255, 0.06);
+
+  /* ── Color: Text ─────────────────────────────────────────── */
+  --color-text-primary:     #f5f5f7;
+  --color-text-secondary:   #c9cbd2;
+  --color-text-muted:       #8a8f98;
+  --color-text-subtle:      #717682;
+
+  /* ── Color: Accent (Indigo) ──────────────────────────────── */
+  --color-accent:           #5b5fef;
+  --color-accent-hover:     #6c70f5;
+  --color-accent-soft:      rgba(91, 95, 239, 0.15);
+  --color-accent-glow:      rgba(91, 95, 239, 0.22);
+  --color-accent-muted:     #a4a6ff;
+  --color-accent-border:    rgba(124, 127, 255, 0.35);
+
+  /* ── Color: Severity ─────────────────────────────────────── */
+  --color-critical:         #ef4444;
+  --color-critical-glow:    rgba(239, 68, 68, 0.20);
+  --color-high:             #f97316;
+  --color-high-glow:        rgba(249, 115, 22, 0.20);
+  --color-medium:           #eab308;
+  --color-medium-glow:      rgba(234, 179, 8, 0.20);
+  --color-low:              #10b981;
+  --color-low-glow:         rgba(16, 185, 129, 0.20);
+  --color-success:          #89e4bd;
+
+  /* ── Spacing Scale (4px base) ────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  28px;
+  --space-8:  32px;
+  --space-9:  36px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+
+  /* ── Border Radius ───────────────────────────────────────── */
+  --radius-xs:  6px;
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  20px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ─────────────────────────────────────────────── */
+  --shadow-xs:     0 1px 3px rgba(0, 0, 0, 0.25);
+  --shadow-sm:     0 4px 12px rgba(0, 0, 0, 0.20);
+  --shadow-card:   0 8px 24px rgba(0, 0, 0, 0.20);
+  --shadow-modal:  0 32px 80px rgba(0, 0, 0, 0.50);
+  --shadow-accent: 0 8px 22px var(--color-accent-glow);
+  --shadow-glow:   0 18px 45px rgba(50, 52, 150, 0.16);
+
+  /* ── Typography ──────────────────────────────────────────── */
+  --font-sans:  "DM Sans", system-ui, sans-serif;
+  --font-mono:  "IBM Plex Mono", "Cascadia Code", monospace;
+
+  --text-xs:    11px;
+  --text-sm:    12px;
+  --text-base:  13px;
+  --text-md:    14px;
+  --text-lg:    16px;
+  --text-xl:    18px;
+  --text-2xl:   24px;
+  --text-3xl:   32px;
+  --text-4xl:   38px;
+  --text-5xl:   58px;
+
+  --leading-tight:  1.1;
+  --leading-snug:   1.35;
+  --leading-base:   1.5;
+  --leading-relaxed: 1.6;
+
+  /* ── Motion ──────────────────────────────────────────────── */
+  --duration-fast:   120ms;
+  --duration-base:   180ms;
+  --duration-slow:   280ms;
+  --duration-xslow:  400ms;
+  --easing-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --easing-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+  --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Z-Index Scale ───────────────────────────────────────── */
+  --z-base:    1;
+  --z-dropdown: 10;
+  --z-drawer:  20;
+  --z-modal:   30;
+  --z-toast:   40;
+
+  /* ── Sidebar ─────────────────────────────────────────────── */
+  --sidebar-width: 230px;
+}
+
+/* ── Reduced motion overrides ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast:   0ms;
+    --duration-base:   0ms;
+    --duration-slow:   0ms;
+    --duration-xslow:  0ms;
+  }
+}
