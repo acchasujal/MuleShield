@@ -4,7 +4,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   Activity, ArrowLeft, ArrowRight, BarChart3, Check, ChevronDown, CircleHelp,
   ClipboardCheck, FileCheck2, FileText, GitBranch, Home, Info, Network,
-  Search, ShieldCheck, Sparkles, Upload, Waypoints, X, Play, RefreshCw, Terminal
+  Search, ShieldCheck, Sparkles, Upload, Waypoints, X, Play, RefreshCw, Terminal, Eye
 } from "lucide-react";
 
 type Severity = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
@@ -40,7 +40,24 @@ const navItems = [
 
 function severityClass(severity: Severity) { return severity.toLowerCase(); }
 function labelStage(stage: string) { return stage.replace(/_/g, " ").replace(/\b\w/g, (m: string) => m.toUpperCase()); }
-function briefFor(item: CaseItem) { return Object.entries(item.shap_signals).sort((a,b) => Math.abs(b[1])-Math.abs(a[1])).slice(0,3).map(([key]) => signalNames[key] || `Elevated factor ${key}`); }
+function briefFor(item: CaseItem) { return Object.entries(item.shap_signals).sort((a,b) => Math.abs(b[1])-Math.abs(a[1])).slice(0,3).map(([key, val]) => ({ key, text: signalNames[key] || `Elevated factor ${key}`, val })); }
+
+// Helper to highlight search matches
+function Highlight({ text, query }: { text: string; query: string }) {
+  if (!query) return <span>{text}</span>;
+  const parts = text.split(new RegExp(`(${query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})`, "gi"));
+  return (
+    <span>
+      {parts.map((part, i) =>
+        part.toLowerCase() === query.toLowerCase() ? (
+          <mark key={i} className="search-highlight">{part}</mark>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </span>
+  );
+}
 
 function App() {
   const location = useLocation(); const navigate = useNavigate();
@@ -50,6 +67,7 @@ function App() {
   const [isCmdOpen, setIsCmdOpen] = useState(false);
   const [offlineMode, setOfflineMode] = useState(true);
   const [unfoldProgress, setUnfoldProgress] = useState<Record<string, number>>({});
+  const [analystDecisions, setAnalystDecisions] = useState<Record<string, "PENDING" | "APPROVED" | "ESCALATED">>({});
 
   const selected = cases.find((item) => item.account === selectedId) || cases[0];
   const filtered = useMemo(() => cases.filter((item) => `${item.account} ${item.severity} ${item.mule_stage} ${item.reasons.join(" ")}`.toLowerCase().includes(query.toLowerCase())), [cases, query]);
@@ -60,7 +78,6 @@ function App() {
     setCases(fallbackCases);
     setSelectedId(fallbackCases[0].account);
     setPackageReady(false);
-    // Reset unfolding sequence for this case
     setUnfoldProgress(prev => ({ ...prev, [fallbackCases[0].account]: 0 }));
     notify("Guided investigation loaded from mock provider.");
     navigate("/investigate");
@@ -71,6 +88,7 @@ function App() {
     setSelectedId(fallbackCases[0].account);
     setPackageReady(false);
     setUnfoldProgress({});
+    setAnalystDecisions({});
     notify("Demo states successfully reset.");
     setIsCmdOpen(false);
   };
@@ -125,13 +143,16 @@ function App() {
             unfoldProgress={unfoldProgress[selected.account] ?? 0}
             setUnfoldProgress={(v) => setUnfoldProgress(prev => ({ ...prev, [selected.account]: v }))}
             notify={notify}
+            query={query}
+            analystDecision={analystDecisions[selected.account] || "PENDING"}
+            setAnalystDecision={(decision) => setAnalystDecisions(prev => ({ ...prev, [selected.account]: decision }))}
           />
         ) : page === "/evidence" ? (
-          <Evidence item={selected} cases={cases} packageReady={packageReady} onPrepare={setPackageReady} notify={notify} />
+          <Evidence item={selected} cases={cases} packageReady={packageReady} onPrepare={setPackageReady} notify={notify} analystDecision={analystDecisions[selected.account] || "PENDING"} />
         ) : page === "/methodology" ? (
           <Methodology />
         ) : (
-          <Cases cases={filtered} onSelect={chooseCase} onGuided={runGuided} onUpload={upload} />
+          <Cases cases={filtered} onSelect={chooseCase} onGuided={runGuided} onUpload={upload} query={query} />
         )}
       </div>
     </main>
@@ -216,7 +237,7 @@ function Sidebar({ offlineMode, onReset }: { offlineMode: boolean, onReset: () =
   </aside>;
 }
 
-function Cases({ cases, onSelect, onGuided, onUpload }: { cases: CaseItem[]; onSelect:(item:CaseItem)=>void; onGuided:()=>void; onUpload:(file:File)=>void }) {
+function Cases({ cases, onSelect, onGuided, onUpload, query }: { cases: CaseItem[]; onSelect:(item:CaseItem)=>void; onGuided:()=>void; onUpload:(file:File)=>void; query: string }) {
   const critical=cases.filter(c=>c.severity==="CRITICAL").length;
   const high=cases.filter(c=>c.severity==="HIGH").length;
   const review=cases.filter(c=>c.severity!=="LOW").length;
@@ -248,7 +269,7 @@ function Cases({ cases, onSelect, onGuided, onUpload }: { cases: CaseItem[]; onS
           <span className="eyebrow">{cases.length} cases</span>
         </div>
         <div className="case-list">
-          {cases.map((item,index)=><CaseRow key={item.account} item={item} selected={index===0} onClick={()=>onSelect(item)}/>)}
+          {cases.map((item,index)=><CaseRow key={item.account} item={item} selected={index===0} onClick={()=>onSelect(item)} query={query}/>)}
         </div>
       </section>
       <section className="card focal">
@@ -280,30 +301,38 @@ function Stat({label,value,detail,color}:{label:string;value:string;detail:strin
   </div>;
 }
 
-function CaseRow({item,selected,onClick}:{item:CaseItem;selected:boolean;onClick:()=>void}) {
+function CaseRow({item,selected,onClick,query}:{item:CaseItem;selected:boolean;onClick:()=>void;query:string}) {
   return <button className={`case-row ${selected?"selected":""}`} onClick={onClick}>
     <div>
       <div className={`status ${severityClass(item.severity)}`}><span className="status-dot"/>{item.severity}</div>
       <div className="small muted" style={{marginTop:5}}>{labelStage(item.mule_stage)}</div>
     </div>
     <div>
-      <div className="case-account mono">{item.account}</div>
-      <div className="case-signal" style={{marginTop: 4}}>{item.reasons.join(" · ")}</div>
+      <div className="case-account mono"><Highlight text={item.account} query={query}/></div>
+      <div className="case-signal" style={{marginTop: 4}}>
+        <Highlight text={item.reasons.join(" · ")} query={query} />
+      </div>
     </div>
     <div className="case-score">{Math.round(item.risk_score)}<span className="muted small"> /100</span></div>
   </button>;
 }
 
 function Investigation({
-  item, cases, onSelect, onBack, packageReady, setPackageReady, unfoldProgress, setUnfoldProgress, notify
+  item, cases, onSelect, onBack, packageReady, setPackageReady, unfoldProgress, setUnfoldProgress, notify, query, analystDecision, setAnalystDecision
 }:{
   item:CaseItem; cases:CaseItem[]; onSelect:(item:CaseItem)=>void; onBack:()=>void;
   packageReady:boolean; setPackageReady:(v:boolean)=>void; unfoldProgress: number; setUnfoldProgress:(v:number)=>void;
-  notify:(m:string)=>void;
+  notify:(m:string)=>void; query: string; analystDecision: "PENDING" | "APPROVED" | "ESCALATED"; setAnalystDecision:(v:"PENDING" | "APPROVED" | "ESCALATED")=>void;
 }) {
   const brief = briefFor(item);
   const stages = ["DORMANT", "ACTIVATION", "NEWLY_RECRUITED", "ACTIVE_MULE", "BEING_FLUSHED"];
   const current = Math.max(0, stages.indexOf(item.mule_stage));
+  
+  // Hover linkage state (P1: Evidence-to-Factor Hover Link)
+  const [hoveredLink, setHoveredLink] = useState<"profile" | "transaction" | "network" | null>(null);
+  
+  // Technical details panel state (P1: Methodology as an Inspector Drawer)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Auto-play unfolding effect with intervals
   useEffect(() => {
@@ -360,6 +389,20 @@ function Investigation({
   };
 
   return <>
+    {/* P1: Scenario Switcher in case header */}
+    <div className="scenario-switcher">
+      <span className="small muted">Quick Scenarios:</span>
+      {cases.map((c) => (
+        <button
+          key={c.account}
+          className={`scenario-chip ${c.account === item.account ? "active" : ""}`}
+          onClick={() => onSelect(c)}
+        >
+          {c.account.slice(-4)} ({c.severity})
+        </button>
+      ))}
+    </div>
+
     <div className="case-header">
       <div className="case-header-left">
         <button className="button" onClick={onBack}><ArrowLeft size={15}/> Cases</button>
@@ -387,8 +430,8 @@ function Investigation({
                 <span className={`status ${severityClass(candidate.severity)}`}><span className="status-dot"/>{candidate.severity}</span>
                 <b className="mono small">{Math.round(candidate.risk_score)}</b>
               </div>
-              <div className="case-account mono" style={{marginTop:7}}>{candidate.account}</div>
-              <div className="case-signal" style={{marginTop: 4}}>{candidate.reasons.join(" · ")}</div>
+              <div className="case-account mono"><Highlight text={candidate.account} query={query}/></div>
+              <div className="case-signal" style={{marginTop: 4}}><Highlight text={candidate.reasons.join(" · ")} query={query}/></div>
             </button>
           ))}
         </div>
@@ -414,29 +457,29 @@ function Investigation({
           </div>
         </div>
 
-        {/* Contributor Bars reveal based on progress */}
+        {/* Contributor Bars reveal based on progress, highlighted by hovered links */}
         <div className="bars">
           {unfoldProgress >= 0 && (
-            <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}>
+            <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className={hoveredLink === "profile" ? "highlighted-bar" : ""}>
               <div className="bar-head"><span>Profile behavior <span className="muted">· 40% weight</span></span><span className="mono">{item.profile_risk.toFixed(0)}</span></div>
               <div className="bar-track"><div className="bar-fill" style={{ width: `${item.profile_risk}%` }} /></div>
             </motion.div>
           )}
           {unfoldProgress >= 1 && (
-            <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} style={{marginTop: 12}}>
+            <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} style={{marginTop: 12}} className={hoveredLink === "transaction" ? "highlighted-bar" : ""}>
               <div className="bar-head"><span>Transaction behavior <span className="muted">· 40% weight</span></span><span className="mono">{item.transaction_risk.toFixed(0)}</span></div>
               <div className="bar-track"><div className="bar-fill" style={{ width: `${item.transaction_risk}%` }} /></div>
             </motion.div>
           )}
           {unfoldProgress >= 2 && (
-            <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} style={{marginTop: 12}}>
+            <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} style={{marginTop: 12}} className={hoveredLink === "network" ? "highlighted-bar" : ""}>
               <div className="bar-head"><span>Network context <span className="muted">· 20% weight</span></span><span className="mono">{item.graph_risk.toFixed(0)}</span></div>
               <div className="bar-track"><div className="bar-fill" style={{ width: `${item.graph_risk}%` }} /></div>
             </motion.div>
           )}
         </div>
 
-        {/* Recommendation Card reveals at Stage 3 */}
+        {/* Recommendation Card with P1 Analyst Review Capture */}
         <AnimatePresence>
           {unfoldProgress >= 3 && (
             <motion.div
@@ -447,7 +490,14 @@ function Investigation({
             >
               <div className="eyebrow">Recommended next step</div>
               <strong>{item.severity === "LOW" ? "No escalation recommended from current evidence." : item.severity === "MEDIUM" ? "Monitor and enrich profile before escalation." : "Immediate review and escalation under bank policy."}</strong>
-              <p className="small muted" style={{marginTop: 6}}>Final action must be confirmed by investigator. No auto-actions taken.</p>
+              
+              <div className="review-capture">
+                <span className="small muted">Confirm Analyst Decision:</span>
+                <div style={{display: "flex", gap: 8, marginTop: 8}}>
+                  <button className={`chip-btn ${analystDecision === "APPROVED" ? "active" : ""}`} onClick={() => { setAnalystDecision("APPROVED"); notify("Marked as Approved."); }}>Approve AI recommendation</button>
+                  <button className={`chip-btn ${analystDecision === "ESCALATED" ? "active" : ""}`} onClick={() => { setAnalystDecision("ESCALATED"); notify("Escalated manually."); }}>Escalate manually</button>
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -457,7 +507,7 @@ function Investigation({
           <motion.div style={{marginTop:26}} initial={{opacity:0}} animate={{opacity:1}}>
             <div className="section-head"><h3>Investigation timeline</h3><span className="small muted">Lifecycle context</span></div>
             <div className="timeline">
-              {stages.map((stage,index)=><div key={stage} className={`timeline-item ${index<current?"done":""} ${index===current?"current":""}`}><div className="timeline-dot"/><div className="timeline-label">{labelStage(stage)}</div></div>)}
+              {stages.map((stage,index)=><div key={stage} className={`timeline-item ${index<current?"done":""} ${index===current?"current":""} ${hoveredLink === "profile" && index === 0 ? "highlighted-timeline" : ""}`}><div className="timeline-dot"/><div className="timeline-label">{labelStage(stage)}</div></div>)}
             </div>
           </motion.div>
         )}
@@ -468,12 +518,25 @@ function Investigation({
         <div className="eyebrow">Case brief</div>
         <h2 style={{marginTop:9}}>Why this case was flagged</h2>
         <p className="muted small" style={{lineHeight:1.55,marginTop:10}}>{item.explanation}</p>
+        
+        {/* Hover elements mapping to factors */}
         <div className="brief-list">
-          {brief.map((text, idx)=>(
+          {brief.map(({ key, text }, idx)=>(
             unfoldProgress >= idx && (
-              <motion.div className="brief-item" key={text} initial={{opacity:0, x:-4}} animate={{opacity:1, x:0}}>
+              <motion.div
+                className="brief-item linkable"
+                key={key}
+                initial={{opacity:0, x:-4}}
+                animate={{opacity:1, x:0}}
+                onMouseEnter={() => {
+                  if (key === "F3889" || key === "F3891") setHoveredLink("profile");
+                  else if (key === "F3908" || key === "F115" || key === "F886") setHoveredLink("transaction");
+                  else setHoveredLink("network");
+                }}
+                onMouseLeave={() => setHoveredLink(null)}
+              >
                 <Check size={15} color="#89e4bd"/>
-                <span>{text}</span>
+                <span>{text} <span className="link-arrow">&rarr;</span></span>
               </motion.div>
             )
           ))}
@@ -481,7 +544,7 @@ function Investigation({
 
         {/* Network diagram panel */}
         {unfoldProgress >= 2 && (
-          <motion.div initial={{opacity:0}} animate={{opacity:1}} style={{marginTop: 20}}>
+          <motion.div initial={{opacity:0}} animate={{opacity:1}} style={{marginTop: 20}} className={hoveredLink === "network" ? "highlighted-network" : ""}>
             <div className="eyebrow">Network evidence</div>
             <div className="network">
               <div className="node small n1">ACC...999</div>
@@ -495,17 +558,57 @@ function Investigation({
           </motion.div>
         )}
 
-        <details className="drawer" style={{marginTop: 20}}>
-          <summary>View technical factors</summary>
-          {Object.entries(item.shap_signals).map(([key,value])=>(
-            <div className="factor" key={key}>
-              <span>{signalNames[key] || key}</span>
-              <span className="mono">{Number(value).toFixed(2)}</span>
-            </div>
-          ))}
-        </details>
+        <button className="button secondary text-center" style={{marginTop: 20, width: "100%"}} onClick={() => setIsDrawerOpen(true)}>
+          <Eye size={14} style={{marginRight:5}}/> View Technical Provenance
+        </button>
       </section>
     </div>
+
+    {/* Sliding Methodology Inspector Drawer (P1: Methodology Drawer) */}
+    <AnimatePresence>
+      {isDrawerOpen && (
+        <div className="drawer-overlay" onClick={() => setIsDrawerOpen(false)}>
+          <motion.div
+            className="drawer-content"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "tween", duration: 0.25 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="drawer-header">
+              <h3>Technical Provenance Panel</h3>
+              <button className="close-btn" onClick={() => setIsDrawerOpen(false)}><X size={16}/></button>
+            </div>
+            <div className="drawer-body">
+              <div className="drawer-section">
+                <h4>Fused Risk Contributors (40/40/20)</h4>
+                <div style={{marginTop: 10}}>
+                  <div className="report-row"><span>Profile Weight</span><span>40%</span></div>
+                  <div className="report-row"><span>Transaction Weight</span><span>40%</span></div>
+                  <div className="report-row"><span>Graph Weight</span><span>20%</span></div>
+                </div>
+              </div>
+              <div className="drawer-section" style={{marginTop: 20}}>
+                <h4>Feature Explainer Weights (SHAP Values)</h4>
+                <div style={{marginTop: 10}}>
+                  {Object.entries(item.shap_signals).map(([key,value])=>(
+                    <div className="factor" key={key}>
+                      <span>{signalNames[key] || key}</span>
+                      <span className="mono">{Number(value).toFixed(2)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="drawer-section" style={{marginTop: 20}}>
+                <h4>Diagnostics & Fallbacks</h4>
+                <p className="small muted">Platform running under STANDALONE ML MODE. Graph relationship outputs are mapped from static topology files because Neo4j is offline.</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
 
     {/* Decision Ledger at the bottom */}
     {unfoldProgress >= 3 && (
@@ -525,7 +628,7 @@ function Investigation({
               <div className="small muted" style={{marginTop:5}}>
                 {index===0 ? item.reasons[0] || "Risk signal" :
                  index===1 ? "Profile and transaction context correlated" :
-                 prepareState === 'ready' ? "Decision finalized & sealed" : "Awaiting investigator review"}
+                 prepareState === 'ready' ? `Decision finalized: ${analystDecision}` : "Awaiting investigator review"}
               </div>
             </div>
           ))}
@@ -535,7 +638,7 @@ function Investigation({
   </>;
 }
 
-function Evidence({item,cases,packageReady,onPrepare,notify}:{item:CaseItem;cases:CaseItem[];packageReady:boolean;onPrepare:(v:boolean)=>void;notify:(m:string)=>void}) {
+function Evidence({item,cases,packageReady,onPrepare,notify,analystDecision}:{item:CaseItem;cases:CaseItem[];packageReady:boolean;onPrepare:(v:boolean)=>void;notify:(m:string)=>void;analystDecision: "PENDING" | "APPROVED" | "ESCALATED"}) {
   const [stampStage, setStampStage] = useState(0);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -569,7 +672,7 @@ function Evidence({item,cases,packageReady,onPrepare,notify}:{item:CaseItem;case
             <div key={candidate.case_id} className="case-row" style={{gridTemplateColumns:"1fr 72px"}}>
               <div>
                 <div className={`status ${severityClass(candidate.severity)}`}><span className="status-dot"/>{candidate.severity}</div>
-                <div className="case-account mono" style={{marginTop:7}}>{candidate.case_id}</div>
+                <div className="case-account mono">{candidate.case_id}</div>
                 <div className="case-signal">{candidate.account} · {index===0||packageReady?"Sealed":"Draft"}</div>
               </div>
               <div className="case-score">{Math.round(candidate.risk_score)}</div>
@@ -594,7 +697,7 @@ function Evidence({item,cases,packageReady,onPrepare,notify}:{item:CaseItem;case
             )}
             {stampStage >= 2 && (
               <div className="ledger-row-stamp" style={{marginTop: 6}}>
-                <span className="stamp-chip active">{packageReady ? "SEALED" : "DRAFT"}</span>
+                <span className="stamp-chip active">{packageReady ? `SEALED (${analystDecision})` : "DRAFT"}</span>
                 <span className="small muted font-mono">{packageReady ? "19 Jul 2026 02:24 UTC" : "PENDING REVIEW"}</span>
               </div>
             )}
@@ -610,6 +713,7 @@ function Evidence({item,cases,packageReady,onPrepare,notify}:{item:CaseItem;case
           <div className="report-row"><span>Case reference</span><span className="mono">{item.case_id}</span></div>
           <div className="report-row"><span>Composite assessment</span><span>{Math.round(item.risk_score)} / 100 · {item.severity}</span></div>
           <div className="report-row"><span>Lifecycle stage</span><span>{labelStage(item.mule_stage)}</span></div>
+          <div className="report-row"><span>Analyst Status</span><span><b>{analystDecision}</b></span></div>
           <div className="report-rule"/>
           <p style={{fontSize:13,lineHeight:1.6}}>{item.explanation}</p>
           <div className="report-rule"/>
