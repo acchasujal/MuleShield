@@ -237,6 +237,7 @@ export const DecisionSurface = memo(function DecisionSurface({
           <InvestigationTimeline
             currentStage={item.mule_stage}
             highlightedDimension={hoveredDimension}
+            item={item}
           />
         </motion.div>
       )}

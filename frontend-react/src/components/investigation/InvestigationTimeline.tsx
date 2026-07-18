@@ -6,15 +6,18 @@
 import { memo } from "react";
 import { MULE_STAGES } from "../../constants";
 import { labelStage } from "../../utils/caseUtils";
+import type { CaseItem } from "../../types";
 
 interface InvestigationTimelineProps {
   currentStage: string;
   highlightedDimension: "profile" | "transaction" | "network" | null;
+  item?: CaseItem;
 }
 
 export const InvestigationTimeline = memo(function InvestigationTimeline({
   currentStage,
   highlightedDimension,
+  item,
 }: InvestigationTimelineProps) {
   const currentIndex = Math.max(0, MULE_STAGES.indexOf(currentStage as typeof MULE_STAGES[number]));
 
@@ -57,6 +60,20 @@ export const InvestigationTimeline = memo(function InvestigationTimeline({
           );
         })}
       </ol>
+      {item?.timeline?.length ? (
+        <div className="event-timeline" aria-label="Investigation evidence events">
+          {item.timeline.map((event, index) => (
+            <div className="event-row" key={`${event.timestamp}-${event.label}`}>
+              <div className={`event-marker event-${event.kind}`} aria-hidden="true" />
+              <div className="event-copy">
+                <div className="event-meta"><span className="font-mono">{event.timestamp}</span><span className="risk-delta">+{event.risk_delta} risk</span></div>
+                <strong>{event.label}</strong><span>{event.detail}</span>
+              </div>
+              {index === item.timeline.length - 1 && <span className="event-decision">Review</span>}
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 });

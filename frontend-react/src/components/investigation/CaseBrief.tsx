@@ -81,6 +81,7 @@ export const CaseBrief = memo(function CaseBrief({
           <NetworkDiagram
             subjectAccount={item.account}
             highlighted={false}
+            item={item}
           />
         </motion.div>
       )}

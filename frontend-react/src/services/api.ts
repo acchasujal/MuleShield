@@ -29,6 +29,10 @@ export function normalizeCase(raw: Record<string, unknown>): CaseItem {
     goaml_xml: String(raw.goaml_xml ?? ""),
     evidence: (raw.evidence as CaseItem["evidence"]) ?? [],
     reasons: (raw.reasons as string[]) ?? [],
+    scenario: String(raw.scenario ?? "Uploaded transaction batch"),
+    institution: String(raw.institution ?? "Bank of India · Demonstration institution"),
+    timeline: (raw.timeline as CaseItem["timeline"]) ?? [],
+    network: (raw.network as CaseItem["network"]) ?? { nodes: [], edges: [] },
   };
 }
 

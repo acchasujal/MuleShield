@@ -30,6 +30,29 @@ export interface Evidence {
   channel?: string;
 }
 
+export interface TimelineEvent {
+  timestamp: string;
+  label: string;
+  detail: string;
+  risk_delta: number;
+  kind: "signal" | "transaction" | "network" | "decision";
+}
+
+export interface NetworkNode {
+  id: string;
+  label: string;
+  role: string;
+  risk: "subject" | "linked" | "sink" | "legitimate";
+}
+
+export interface NetworkEdge {
+  from: string;
+  to: string;
+  amount: number;
+  channel: string;
+  direction: "inbound" | "outbound";
+}
+
 export interface CaseItem {
   account: string;
   risk_score: number;
@@ -45,6 +68,10 @@ export interface CaseItem {
   goaml_xml: string;
   evidence: Evidence[];
   reasons: string[];
+  scenario: string;
+  institution: string;
+  timeline: TimelineEvent[];
+  network: { nodes: NetworkNode[]; edges: NetworkEdge[] };
 }
 
 export interface NavItem {
