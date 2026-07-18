@@ -11,7 +11,7 @@ def render_lifecycle_timeline(mule_stage: str) -> tuple[str, str, str]:
         step_states  = [1, 0, 0, 0, 0]
         current_step = "Recruitment"
         reason       = "Account has been recently opened (L7D/L90D bucket) and shows high transactional risk, indicating immediate recruitment."
-        action_sop   = "Temporary debit freeze. Queue for enhanced verification of demographic credentials."
+        action_sop   = "Temporary hold recommendation. Queue for enhanced verification of demographic credentials."
     elif mule_stage_clean == "UNDER_REVIEW":
         step_states  = [2, 1, 0, 0, 0]
         current_step = "Under Review"
@@ -26,12 +26,12 @@ def render_lifecycle_timeline(mule_stage: str) -> tuple[str, str, str]:
         step_states  = [2, 2, 1, 0, 0]
         current_step = "Active Mule"
         reason       = "Frequent watchlist Warn-Flag hits (F3912), regulatory TMS violations (F670), and UPI structuring transactions matching high-density laundering patterns."
-        action_sop   = "Immediate account freeze, generate Suspicious Transaction Report (STR) XML, and submit compliance docket to FIU-IND."
+        action_sop   = "Immediate hold recommendation, generate Suspicious Transaction Report (STR) XML, and prepare compliance docket."
     elif mule_stage_clean == "BEING_FLUSHED":
         step_states  = [2, 2, 2, 1, 0]
         current_step = "Being Flushed"
         reason       = "Extreme debit/credit volume frequency ratio (F115) coupled with complete absence of standard retail banking behavior (F2082), signifying active proceeds dispersal."
-        action_sop   = "Total account freeze, suspend beneficiary channels, and escalate transaction coordinates to the Enforcement Directorate (ED) immediately."
+        action_sop   = "Total hold recommendation, recommend beneficiary channel suspension, and escalate transaction coordinates immediately."
     elif mule_stage_clean == "DORMANT":
         step_states  = [2, 2, 2, 2, 1]
         current_step = "Dormant"
@@ -152,7 +152,7 @@ def render_dispatch_controls(account_id: str) -> None:
     btn_rev = col_act2.button("Initiate Review", key=f"btn_rev_{account_id}")
     btn_esc = col_act3.button("Escalate",        key=f"btn_esc_{account_id}")
     btn_str = col_act4.button("File STR",        key=f"btn_str_{account_id}")
-    btn_frz = col_act5.button("Freeze Account",  key=f"btn_frz_{account_id}")
+    btn_frz = col_act5.button("Recommend Hold",  key=f"btn_frz_{account_id}")
 
     if btn_mon:
         st.toast("Monitor: Account telemetry logging enabled. Watchlist records synced.")
@@ -167,5 +167,5 @@ def render_dispatch_controls(account_id: str) -> None:
         st.toast("File STR: goAML XML payload queued for FIU-IND submission.")
         st.success("File STR: Compliance payload queued.")
     if btn_frz:
-        st.toast("Freeze Account: CBS debit freeze webhook executed.")
-        st.error("Freeze Account: Debit freeze lock applied via CBS webhook.")
+        st.toast("Recommend Hold: Hold request logged for investigator review.")
+        st.error("Recommend Hold: Hold recommendation applied.")

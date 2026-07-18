@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuleShield — AI-Driven AML Mule Account Containment Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Outfit & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            font-family: 'Outfit', sans-serif;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        .gradient-glow {
+            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 0) 50%);
+        }
+    </style>
+</head>
+<body class="selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Sticky Header -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/70 border-b border-slate-900">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">M</div>
+                <span class="text-xl font-bold tracking-tight text-white">MuleShield <span class="text-indigo-400 text-sm font-semibold">AI</span></span>
+            </div>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+                <a href="#features" class="hover:text-white transition-colors">Features</a>
+                <a href="#architecture" class="hover:text-white transition-colors">Architecture</a>
+                <a href="#compliance" class="hover:text-white transition-colors">Compliance</a>
+            </nav>
+            <a href="http://localhost:5173" target="_blank" class="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white bg-indigo-600 hover:bg-indigo-500 rounded-md shadow-lg shadow-indigo-600/30 transition-all">
+                Launch Command Center
+            </a>
+        </div>
+    </header>
+
+    <main class="relative">
+        <!-- Background Radial Glows -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] gradient-glow pointer-events-none -z-10"></div>
+        <div class="absolute top-[800px] left-1/2 -translate-x-1/2 w-[1000px] h-[800px] gradient-glow pointer-events-none -z-10"></div>
+
+        <!-- 1. Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 pt-20 pb-16 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-xs font-semibold mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+                Standard-Setting AML Intelligence
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.1] mb-6">
+                Stop Mule Networks <span class="bg-gradient-to-r from-indigo-400 via-violet-400 to-sky-400 bg-clip-text text-transparent">Before They Disperse</span> Funds
+            </h1>
+            
+            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
+                A dual-engine machine learning and graph network intelligence platform designed for real-time identification, audit, and automated containment of illicit accounts.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                <a href="http://localhost:5173" target="_blank" class="w-full sm:w-auto px-8 py-4 text-sm font-bold uppercase tracking-wider text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-xl shadow-indigo-600/25 transition-all text-center">
+                    Launch Command Center
+                </a>
+                <a href="#architecture" class="w-full sm:w-auto px-8 py-4 text-sm font-semibold text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 bg-slate-950/40 rounded-lg transition-all text-center">
+                    Explore Architecture
+                </a>
+            </div>
+
+            <!-- Virtual Screenshot/Dashboard Mockup -->
+            <div class="relative max-w-5xl mx-auto rounded-xl border border-slate-800 bg-slate-950/80 p-4 shadow-2xl shadow-indigo-500/5">
+                <div class="flex items-center justify-between border-b border-slate-900 pb-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                    </div>
+                    <span class="text-xs text-slate-500 font-mono">Muleshield-Command-Center-V2.app</span>
+                    <span class="w-4 h-4"></span>
+                </div>
+                <!-- Mockup Grid Content -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                    <div class="p-5 rounded-lg border border-slate-900/60 bg-slate-900/30">
+                        <div class="text-slate-500 text-xs uppercase tracking-wide font-semibold mb-2">Case Ingestion</div>
+                        <div class="h-2 w-24 bg-indigo-500/40 rounded mb-4"></div>
+                        <div class="space-y-2">
+                            <div class="p-2 rounded bg-indigo-600/10 border border-indigo-500/20 text-xs font-mono flex justify-between">
+                                <span class="text-slate-300">Dormant Ring</span>
+                                <span class="text-indigo-400">LOADED</span>
+                            </div>
+                            <div class="p-2 rounded bg-slate-900 border border-slate-900 text-xs font-mono flex justify-between">
+                                <span class="text-slate-500">Student Mule</span>
+                                <span class="text-slate-600">READY</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 rounded-lg border border-slate-900/60 bg-slate-900/30 col-span-2">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-slate-500 text-xs uppercase tracking-wide font-semibold">Active Case Details</span>
+                            <span class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 text-[10px] font-bold border border-rose-500/20">CRITICAL</span>
+                        </div>
+                        <div class="text-2xl font-bold text-white font-mono mb-1">ACC0520000000999</div>
+                        <div class="flex items-baseline gap-6 mb-3">
+                            <div>
+                                <div class="text-[10px] text-slate-500">COMPOSITE RISK</div>
+                                <div class="text-lg font-bold text-indigo-400">98.0%</div>
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-slate-500">STAGE</div>
+                                <div class="text-lg font-semibold text-amber-500">Being Flushed</div>
+                            </div>
+                        </div>
+                        <!-- Horizontal sub-bars -->
+                        <div class="space-y-1.5">
+                            <div class="h-1 bg-slate-800 rounded overflow-hidden"><div class="bg-indigo-500 h-full w-[95%]"></div></div>
+                            <div class="h-1 bg-slate-800 rounded overflow-hidden"><div class="bg-amber-500 h-full w-[80%]"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Bento Stats Section -->
+        <section id="features" class="max-w-7xl mx-auto px-6 py-16 border-t border-slate-900">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-8 text-center">Engine Performance Targets</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Stat 1 -->
+                <div class="p-6 rounded-xl border border-slate-900 bg-slate-950/40 hover:border-slate-800 transition-all">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-indigo-400 mb-4"></i>
+                    <div class="text-3xl font-extrabold text-white mb-1">₹48.92 Cr</div>
+                    <div class="text-sm font-semibold text-slate-300">Estimated Interdicted Funds</div>
+                    <div class="text-xs text-slate-500 mt-2">Simulated benchmark dataset</div>
+                </div>
+                <!-- Stat 2 -->
+                <div class="p-6 rounded-xl border border-slate-900 bg-slate-950/40 hover:border-slate-800 transition-all">
+                    <i data-lucide="zap" class="w-6 h-6 text-indigo-400 mb-4"></i>
+                    <div class="text-3xl font-extrabold text-white mb-1">&lt; 8 sec</div>
+                    <div class="text-sm font-semibold text-slate-300">Interdiction SLA Target</div>
+                    <div class="text-xs text-slate-500 mt-2">Real-time containment action</div>
+                </div>
+                <!-- Stat 3 -->
+                <div class="p-6 rounded-xl border border-slate-900 bg-slate-950/40 hover:border-slate-800 transition-all">
+                    <i data-lucide="server" class="w-6 h-6 text-indigo-400 mb-4"></i>
+                    <div class="text-3xl font-extrabold text-white mb-1">5.81 sec</div>
+                    <div class="text-sm font-semibold text-slate-300">Batch Processing Time</div>
+                    <div class="text-xs text-slate-500 mt-2">Tested on 9,082-account benchmark</div>
+                </div>
+                <!-- Stat 4 -->
+                <div class="p-6 rounded-xl border border-slate-900 bg-slate-950/40 hover:border-slate-800 transition-all">
+                    <i data-lucide="cpu" class="w-6 h-6 text-indigo-400 mb-4"></i>
+                    <div class="text-3xl font-extrabold text-white mb-1">12,852</div>
+                    <div class="text-sm font-semibold text-slate-300">Watchlist Nodes Ingested</div>
+                    <div class="text-xs text-slate-500 mt-2">Graph database telemetry</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Architecture Section -->
+        <section id="architecture" class="max-w-7xl mx-auto px-6 py-20 border-t border-slate-900">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <div class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3">Core Analytics</div>
+                    <h3 class="text-3xl md:text-4xl font-bold text-white mb-6">Dual-Engine Score Fusion</h3>
+                    <p class="text-slate-400 leading-relaxed mb-6">
+                        MuleShield fuses machine learning classifiers with transactional graph centrality models to capture both single-profile behavioral anomalies and structural routing topology.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded bg-indigo-500/10 flex items-center justify-center shrink-0 border border-indigo-500/20">
+                                <i data-lucide="bar-chart-3" class="w-4 h-4 text-indigo-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">XGBoost Classifiers (40% Weight)</h4>
+                                <p class="text-xs text-slate-500 mt-0.5">Scans individual account registration parameters, dormancy age buckets, and behavioral indicators.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded bg-indigo-500/10 flex items-center justify-center shrink-0 border border-indigo-500/20">
+                                <i data-lucide="git-branch" class="w-4 h-4 text-indigo-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Neo4j Network Centrality (20% Weight)</h4>
+                                <p class="text-xs text-slate-500 mt-0.5">Identifies layering loops, high-velocity UPI smurfing stars, and sink node aggregators.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded bg-indigo-500/10 flex items-center justify-center shrink-0 border border-indigo-500/20">
+                                <i data-lucide="activity" class="w-4 h-4 text-indigo-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Transaction Heuristic Rules (40% Weight)</h4>
+                                <p class="text-xs text-slate-500 mt-0.5">Ensures hard rules are enforced for immediate suspicious activity triggers.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Architecture visualization block -->
+                <div class="p-8 rounded-2xl border border-slate-900 bg-slate-950/60 font-mono text-xs text-slate-400 space-y-4 shadow-xl">
+                    <div class="text-indigo-400 font-bold border-b border-slate-900 pb-2">// FUSION CONFIG (v5)</div>
+                    <div>
+                        <span class="text-slate-500"># Weights Spec</span><br>
+                        <span class="text-white">PROFILE_WEIGHT</span> = <span class="text-amber-500">0.40</span><br>
+                        <span class="text-white">TRANSACTION_WEIGHT</span> = <span class="text-amber-500">0.40</span><br>
+                        <span class="text-white">GRAPH_WEIGHT</span> = <span class="text-amber-500">0.20</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500"># Execution Formula</span><br>
+                        <span class="text-emerald-400">fused_score</span> = (profile_val * PROFILE_WEIGHT) + (txn_val * TRANSACTION_WEIGHT) + (graph_val * GRAPH_WEIGHT)
+                    </div>
+                    <div class="pt-4 border-t border-slate-900">
+                        <span class="text-indigo-400 font-bold">// CLASSIFICATION TIERS</span><br>
+                        • &ge; 80.0 &rarr; <span class="text-rose-500 font-bold">CRITICAL</span> (CBS AUTO FREEZE)<br>
+                        • 60.0 - 79.9 &rarr; <span class="text-rose-400">HIGH</span> (KYC BLOCK)<br>
+                        • 40.0 - 59.9 &rarr; <span class="text-amber-500">MEDIUM</span> (AUDITOR REVIEW)<br>
+                        • &lt; 40.0 &rarr; <span class="text-emerald-400">LOW</span> (MONITORED)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Trust & Compliance Footer -->
+        <section id="compliance" class="bg-slate-950 border-t border-slate-900 py-16">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <i data-lucide="shield-check" class="w-5 h-5 text-indigo-400"></i>
+                            <span class="font-bold text-white tracking-tight">Audit Trail Cryptography</span>
+                        </div>
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            Every case interdiction logs a SHA-256 seal to local storage. Admissible as electronic evidence under Section 65B of the Indian Evidence Act.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <i data-lucide="file-text" class="w-5 h-5 text-indigo-400"></i>
+                            <span class="font-bold text-white tracking-tight">goAML STR Exports</span>
+                        </div>
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            Generates FIU-IND schema compliant Suspicious Transaction Reports (STRs) dynamically, formatted directly for official regulatory gateway upload.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <i data-lucide="webhook" class="w-5 h-5 text-indigo-400"></i>
+                            <span class="font-bold text-white tracking-tight">I4C / CBS Webhooks</span>
+                        </div>
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            Equipped with outbound webhooks compatible with Core Banking Systems for immediate channel freezing and inter-agency threat notifications.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600">
+                    <div>&copy; 2026 MuleShield AI. Designed for B2B Bank Compliance Operations.</div>
+                    <div class="flex gap-6">
+                        <a href="#" class="hover:text-slate-400 transition-colors">Privacy Policy</a>
+                        <a href="#" class="hover:text-slate-400 transition-colors">Terms of Service</a>
+                        <a href="http://localhost:5173" target="_blank" class="text-indigo-400 hover:underline">Launch React App</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
