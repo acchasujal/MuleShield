@@ -119,7 +119,7 @@ Create and activate a virtual environment, install dependencies, and run the ser
 ```cmd
 python -m venv venv
 call venv\Scripts\activate
-pip install -r backend/requirements.txt
+pip install -r requirements.txt
 set PYTHONPATH=.
 uvicorn backend.app:app --reload --port 8000
 ```
@@ -128,7 +128,7 @@ uvicorn backend.app:app --reload --port 8000
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
-pip install -r backend/requirements.txt
+pip install -r requirements.txt
 $env:PYTHONPATH="."
 uvicorn backend.app:app --reload --port 8000
 ```
@@ -137,7 +137,7 @@ uvicorn backend.app:app --reload --port 8000
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-pip install -r backend/requirements.txt
+pip install -r requirements.txt
 export PYTHONPATH=.
 uvicorn backend.app:app --reload --port 8000
 ```

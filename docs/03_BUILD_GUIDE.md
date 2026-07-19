@@ -54,13 +54,30 @@ This spawns:
 - Neo4j on port `7474` (HTTP interface) and `7687` (Bolt interface)
 
 ### Step 2: Initialize FastAPI Backend
-1. Navigate to `/backend`:
+1. From the project root, activate your virtual environment:
+   ```bash
+   # Windows Command Prompt
+   call venv\Scripts\activate
+   # Windows PowerShell
+   .\venv\Scripts\Activate.ps1
+   # macOS/Linux
+   source venv/bin/activate
+   ```
+2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-2. Start the API server:
+3. Run the API server:
    ```bash
-   uvicorn app:app --reload --port 8000
+   # Windows Command Prompt
+   set PYTHONPATH=.
+   uvicorn backend.app:app --reload --port 8000
+   # Windows PowerShell
+   $env:PYTHONPATH="."
+   uvicorn backend.app:app --reload --port 8000
+   # macOS/Linux
+   export PYTHONPATH=.
+   uvicorn backend.app:app --reload --port 8000
    ```
    * Swagger docs are live at `http://localhost:8000/docs`.
 
