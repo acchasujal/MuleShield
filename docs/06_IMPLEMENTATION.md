@@ -1,6 +1,6 @@
-# MuleShield AI — Implementation Specification
+# 06_IMPLEMENTATION.md — MuleShield AI: Implementation Specification
 
-This document details the modular code structure, React state management context architecture, and implementation details of the React web application.
+This document details the modular code structure, state context architecture, and React codebases deployed to implement the money-mule intelligence prototype.
 
 ---
 
@@ -12,18 +12,18 @@ All global states reside in [`AppContext.tsx`](file:///d:/Projects/Muleshield/fr
 - `analystDecisions`: Record mapping case accounts to investigator outcomes (`PENDING`, `APPROVED`, `ESCALATED`).
 - `packageReady`: Tracks whether evidence packages are sealed.
 - `unfoldProgress`: Controls simulation animation timelines per case.
-- `offlineMode`: Simulates fallback data states when decoupled from FastAPI.
+- `offlineMode`: Simulates fallback data states when decoupled from the FastAPI backend.
 
 ---
 
 ## 2. Component Layout & Sizing
 
-Every UI element is split into specialized sub-components under 200 lines to ensure code quality:
+Every UI element is split into specialized sub-components under 200 lines to ensure codebase hygiene and maintainability:
 - `components/layout/`: Sidebar and Topbar navigations.
 - `components/ui/`: Standard StatCards, Highlights, and Toast banners.
-- `components/cases/`: Case rows and tables.
-- `components/investigation/`: Timeline trackers, DecisionSurfaces, and interactive SVG diagrams.
-- `components/command-palette/`: Raycast-style modals.
+- `components/cases/`: Case rows and queues.
+- `components/investigation/`: Timeline trackers, DecisionSurfaces, CaseBriefs, and interactive SVG diagrams.
+- `components/command-palette/`: Raycast-style search modals.
 
 ---
 

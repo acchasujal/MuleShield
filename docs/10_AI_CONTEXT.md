@@ -1,12 +1,12 @@
-# MuleShield AI — Explainable AI (XAI) Framework
+# 10_AI_CONTEXT.md — MuleShield AI: AI Context & Explainability Framework
 
-This document outlines the machine learning explanation models, feature mapping keys, and explainability boundaries implemented in MuleShield AI.
+This document outlines the machine learning explanation models, feature mapping keys, and explainability boundaries implemented in the MuleShield AI financial trust infrastructure.
 
 ---
 
 ## 1. Mapped Feature Explainer Keys (SHAP to Plain English)
 
-The system translates SHAP feature indicators into human-readable AML flags. Mapped signal definitions include:
+The system translates SHAP feature indicators into human-readable, explainable financial trust intelligence:
 
 - **`F3889`**: Dormant profile reactivated
 - **`F3908`**: High-velocity pass-through behavior
@@ -22,13 +22,13 @@ The system translates SHAP feature indicators into human-readable AML flags. Map
 
 - **Model Engine**: XGBoost binary classifier trained on 122 variables.
 - **Explainability**: Local feature attributions calculated using `shap.TreeExplainer`.
-- **UI Presentation**: Mapped values show up under the "Case Brief" panel with interactive links that tie signals directly back to their risk contributor dimensions.
+- **UI Presentation**: Mapped values show up under the "Case Brief" panel with interactive focus links that tie signals directly back to their risk contributor dimensions.
 
 ---
 
-## 3. Mule Staging Decision Matrix
+## 3. Threat Staging Decision Matrix
 
-State progression rules map composite threat risk scores to active lifecycle phases:
+State progression rules map composite risk scores to active lifecycle phases:
 
 | Fused Severity | Heuristic Conditions | Resolved Stage | Action |
 | :--- | :--- | :--- | :--- |

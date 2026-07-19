@@ -23,7 +23,7 @@ export const Sidebar = memo(function Sidebar({
         <div className="brand-mark" aria-hidden="true">M</div>
         <div>
           <div className="brand-name">MuleShield AI</div>
-          <div className="brand-sub">Trust infrastructure</div>
+          <div className="brand-sub">Financial Trust Infra</div>
         </div>
       </div>
 

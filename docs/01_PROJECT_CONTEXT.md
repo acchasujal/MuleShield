@@ -1,42 +1,42 @@
-# MuleShield AI — Project Context
+# 01_PROJECT_CONTEXT.md — MuleShield AI: Project Context & Strategy
 
 ## 1. Executive Summary
 
-**MuleShield AI** is a dual-engine (tabular ML + graph analytics) money-mule detection platform built for financial institutions. Positioned as **"the compliance officer's autopilot,"** MuleShield catches mule accounts before funds are flushed and auto-generates a regulator-ready evidence package with cryptographic integrity sealing.
+**MuleShield AI** is an **AI-Native Financial Trust Infrastructure for the Next Billion Users**. It transforms raw financial behavior into explainable trust intelligence, enabling banks and payment networks to build trust at scale in digital finance.
 
-- **Tagline**: *"See the mule before the money moves."*
-- **Positioning**: High-fidelity infrastructure that merges profile analysis, transaction heuristics, and network topology to generate defensible, explainable compliance handoffs.
-
----
-
-## 2. The Problem & Solution Space
-
-### The Problem
-India's digital payment rails (e.g. UPI) are heavily exploited by organized networks utilizing money-mule accounts—often recruited from vulnerable populations. Traditional rules-based systems lack network awareness, generate massive volumes of false positives, and fail to provide explainability, leaving compliance teams overwhelmed by manual review backlogs.
-
-### The Solution
-MuleShield introduces a **Composite Risk Fusion Engine** that computes a unified risk score across three distinct dimensions:
-```
-Composite Risk = (Profile Risk × 0.40) + (Transaction Risk × 0.40) + (Graph Risk × 0.20)
-```
-- **Profile Risk (40%)**: XGBoost ML model analyzing 122 profile variables with SHAP-based feature attribution.
-- **Transaction Risk (40%)**: Heuristics tracking layering, circular loops, payment channel switching, and velocity spikes.
-- **Graph Risk (20%)**: Graph analytics (degree centrality and page rank) mapping connections to known shell accounts and crypto/cash-out hubs.
+- **Tagline**: *"Infrastructure for Trust at Scale in Digital Finance"*
+- **Core Positioning**: Rather than acting as a static fraud detector or standard compliance dashboard, MuleShield AI provides the trust layer for high-volume digital financial networks. The first flagship capability demonstrating this infrastructure is **Money Mule Intelligence**.
 
 ---
 
-## 3. Product Differentiators
+## 2. The Prototype vs. Platform vs. Vision Matrix
 
-1. **Compliance-Ready Handoffs**: Auto-generates goAML XML reports and computes SHA-256 evidence hashes designed to satisfy Section 65B of the Indian Evidence Act.
-2. **Explainable AI (XAI)**: Mapped SHAP feature attributions tell analysts exactly *why* a profile was flagged, converting complex model weights into plain-English narratives.
-3. **Mule Lifecycle Stages**: Tracks accounts as they progress through dynamic lifecycle phases (`DORMANT` → `ACTIVATION` → `NEWLY_RECRUITED` → `ACTIVE_MULE` → `BEING_FLUSHED`) rather than using static threat scores.
-4. **Resilient Offline Architecture**: Features dynamic mock fallback modes that degrade gracefully when Neo4j or external APIs are disconnected.
+To inspire trust and demonstrate clear technical execution, MuleShield AI maintains a strict division between current capabilities, near-term platform expansions, and long-term ecosystem vision:
+
+### 1. Prototype (Current State: Money Mule Intelligence)
+*Our implementation demonstrates immediate execution and builds technical credibility.*
+- **Dual-Engine Risk Fusion**: Real-time 40/40/20 composite risk scoring combining tabular XGBoost ML probabilities, transaction rule heuristics, and Neo4j graph centrality metrics.
+- **Explainable AI (XAI)**: Mapped SHAP feature attributions translating complex model weights into plain-English reasoning.
+- **Mule Lifecycle Staging**: Classifies accounts into dynamic threat stages (`DORMANT` → `ACTIVATION` → `NEWLY_RECRUITED` → `ACTIVE_MULE` → `BEING_FLUSHED`).
+- **Cryptographic Autopilot**: Automatic compilation of goAML-compliant XML compliance reports sealed with SHA-256 evidence hashes for Indian Evidence Act Section 65B compliance.
+
+### 2. Platform (Near-term: Explainable Financial Trust Intelligence)
+*Programmatic APIs and tools to scale integration across a bank's operations.*
+- **Trust APIs**: Real-time programmatic trust-signal access for core banking systems (CBS).
+- **Merchant Trust Intelligence**: Custom heuristics and models tracking business account layering, merchant loop routing, and settlement anomalies.
+- **Lending Trust Intelligence**: Pre-disbursement trust scoring to verify loan application authenticity.
+
+### 3. Vision (Long-term: AI-Native Financial Trust Infrastructure)
+*Our strategic direction to protect the next billion users.*
+- **Cross-Bank Trust Federation**: Federated, privacy-preserving shared risk networks using differential privacy.
+- **Federated Trust Learning**: Training behavioral threat models across multiple participating institutions without centralizing raw transaction graphs.
+- **Regulator Integration**: Direct real-time feedback loops between banking evidence generators and regulatory portals (FIU-IND/RBI).
 
 ---
 
-## 4. Technology Stack
+## 3. Core Differentiators
 
-- **Backend**: FastAPI, Python (XGBoost, SHAP)
-- **Frontend**: React (Vite, TypeScript, TailwindCSS/Vanilla CSS)
-- **Database/Graph**: Neo4j Graph Database, PostgreSQL
-- **Infrastructure**: Docker Compose for local deployment
+1. **Category Creator**: Moves beyond isolated "fraud detection" to build **Financial Trust Infrastructure** that continuously understands financial behavior, assists investigator workflows, and generates regulatory evidence.
+2. **Explainability Over Black Boxes**: Mapped SHAP attributions convert model feature weights into transparent, defensible, plain-English narratives.
+3. **Resilient Offline Architecture**: Features dynamic mock fallback modes that degrade gracefully when Neo4j or external APIs are disconnected.
+4. **Regulatory-Native Design**: goAML XML generation and SHA-256 evidence hashing are core architectural constraints, not cosmetic add-ons.

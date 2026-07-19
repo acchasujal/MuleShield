@@ -50,9 +50,9 @@ export function MethodologyPage() {
               className="text-muted text-sm"
               style={{ lineHeight: "var(--leading-relaxed)" }}
             >
-              MuleShield presents a risk recommendation and prepares evidence
-              for investigator review. It does not automatically freeze an
-              account or claim that a report has been submitted.
+              MuleShield AI presents a risk recommendation and prepares evidence
+              for investigator review, acting as explainable financial trust intelligence.
+              It does not automatically freeze accounts without policy authorization.
             </p>
           </div>
         </div>

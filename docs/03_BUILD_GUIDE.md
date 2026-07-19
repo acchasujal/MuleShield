@@ -1,22 +1,22 @@
-# MuleShield AI — Build & Deployment Guide
+# 03_BUILD_GUIDE.md — MuleShield AI: Build & Deployment Guide
 
-This document specifies the setup, build steps, and environment configuration required to run the MuleShield AI platform locally.
+This document specifies the setup, build steps, and environment configuration required to deploy the MuleShield AI financial trust infrastructure locally.
 
 ---
 
 ## 1. System Requirements
 
-- **Docker & Docker Compose**: Required for running graph database (Neo4j) and Postgres.
-- **Node.js (v18+) & npm**: Required to build and run the React frontend workspace.
-- **Python (v3.10+)**: Required for running the FastAPI backend server and ML training models.
+- **Docker & Docker Compose**: Required to spin up the local graph database (Neo4j) and the database audit logger (PostgreSQL).
+- **Node.js (v18+) & npm**: Required to build and run the React workspace.
+- **Python (v3.10+)**: Required for running the FastAPI backend gateway and explainable ML scoring modules.
 
 ---
 
-## 2. Directory Structure
+## 2. Repository Directory Structure
 
-- `/backend`: FastAPI gateway, database ORM connectors, Neo4j graph connectors, and prediction modules.
-- `/frontend-react`: Vite + React + TypeScript workspace.
-- `/docs`: Structured project specification documents.
+- `/backend`: FastAPI service layers, database ORM connectors, Neo4j graph connectors, and prediction modules.
+- `/frontend-react`: Vite + React + TypeScript workspace containing the Investigator Workspace interface.
+- `/docs`: Consolidated 12-file numbered documentation tree.
 
 ---
 
@@ -45,23 +45,24 @@ NEO4J_PASSWORD=password
 
 ## 4. Setup & Ingestion
 
-### Step 1: Start Databases
+### Step 1: Start Database Containers
 ```bash
 docker-compose up -d
 ```
 This spawns:
 - PostgreSQL on port `5432`
-- Neo4j on port `7474` (HTTP) and `7687` (Bolt)
+- Neo4j on port `7474` (HTTP interface) and `7687` (Bolt interface)
 
-### Step 2: Initialize Backend
+### Step 2: Initialize FastAPI Backend
 1. Navigate to `/backend`:
    ```bash
    pip install -r requirements.txt
    ```
-2. Start the FastAPI gateway server:
+2. Start the API server:
    ```bash
    uvicorn app:app --reload --port 8000
    ```
+   * Swagger docs are live at `http://localhost:8000/docs`.
 
 ### Step 3: Run React Workspace
 1. Navigate to `/frontend-react`:
@@ -72,4 +73,4 @@ This spawns:
    ```bash
    npm run dev
    ```
-   Open `http://localhost:5173/` in your browser.
+   Open `http://localhost:5173/` in your browser to access the Investigator Workspace.

@@ -1,26 +1,23 @@
-# MuleShield AI — Consolidated Changelog & History
+# 11_CHANGELOG.md — MuleShield AI: Consolidated Changelog & History
 
-This changelog outlines the key releases, features, visual redesigns, and bug fixes during the development of MuleShield AI.
+This changelog outlines the key releases, features, visual updates, and positioning milestones during the development of MuleShield AI.
 
 ---
 
-## [1.1.0] — Final Polish (Current Release)
+## [1.2.0] — Positioning Update (Current Release)
+- Realigned documentation and UI narrative around **AI-Native Financial Trust Infrastructure**.
+- Defined strict boundaries between the Money Mule Intelligence prototype, Explainable Financial Trust platform, and Federated Trust Infrastructure vision.
+- Standardized UI copy to utilize high-fidelity compliance and trust terminology.
 
-### Added
+## [1.1.0] — Final Polish
 - Created `formatAccount` utility to mask account IDs into readable `BOI •••• 0028` values, with hover overlays.
 - Replaced horizontal static timeline with dynamic investigation events timeline detailing transaction and network triggers.
 - Re-styled scenario selection controls to behave as a single segmented pill control.
-
-### Improved
-- Standardized Card components padding to 24px and Unified border radius definitions.
+- Standardized Card components padding to 24px and unified border radius definitions.
 - Refactored Case Queue lists to display as a professional inbox layout.
 - Added high-contrast background highlights for network graph nodes to improve readability.
 
----
-
 ## [1.0.0] — Modular Restructure
-
-### Added
 - Split monolithic 815-line `App.tsx` file into dedicated routing files, contexts, page layouts, components, utilities, and services.
 - Created `AppContext.tsx` to handle shared states (cases, selections, and mock connectivity) without prop drilling.
 - Designed Raycast-style command palette overlay with full keyboard controls (`ArrowUp`, `ArrowDown`, `Enter`, `Esc`, `1-4`, letter shortcuts).

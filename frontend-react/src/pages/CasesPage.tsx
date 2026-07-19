@@ -173,8 +173,8 @@ export function CasesPage({ query }: CasesPageProps) {
             className="text-muted"
             style={{ lineHeight: "var(--leading-relaxed)", marginTop: "var(--space-3)" }}
           >
-            Open a prepared scenario to see how MuleShield turns profile,
-            transaction, and network signals into an explainable handoff.
+            Open a prepared scenario to see how MuleShield AI fuses profile anomalies,
+            transaction heuristics, and network graphs into explainable trust intelligence.
           </p>
           <div className="callout">
             <div className="status-badge severity-critical">

@@ -1,6 +1,6 @@
-# MuleShield AI — Connected Demo Dataset Specification
+# 08_DATASET.md — MuleShield AI: Connected Demo Dataset Specification
 
-This document details the single connected financial crime universe utilized by the MuleShield AI demonstration. Every account, transaction, and narrative belongs to the same underlying money-laundering network.
+This document details the single connected financial crime universe utilized by the MuleShield AI money-mule intelligence prototype. Every account, transaction, and narrative belongs to the same underlying money-laundering network.
 
 ---
 
@@ -8,7 +8,7 @@ This document details the single connected financial crime universe utilized by 
 
 The demo maps out a coordinated money-laundering syndicate operating through **Bank of India** and linked merchant hubs. The entities are:
 
-### The Victims
+### The Victims & Mules
 - **Mrs. Ananya Sharma**: Retired school teacher who fell victim to a fake investment scam.
 - **Rohan Mehta**: Student mule recruited via campus social circles.
 

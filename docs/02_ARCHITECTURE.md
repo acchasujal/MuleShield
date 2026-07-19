@@ -1,8 +1,8 @@
-# MuleShield AI — System Architecture Specification
+# 02_ARCHITECTURE.md — MuleShield AI: System Architecture Specification
 
 ## 1. High-Level Blueprint
 
-MuleShield AI uses a dual-engine architecture combining profile-based XGBoost inference with transactional graph analytics to score fraud risk.
+MuleShield AI is designed as a modular **AI-Native Financial Trust Infrastructure**. It converts complex transactional metadata and profile features into a unified financial trust graph, feeding real-time decision and compliance layers.
 
 ```
  Incoming transactions ➔ Ingestion & Slicing
@@ -16,23 +16,23 @@ MuleShield AI uses a dual-engine architecture combining profile-based XGBoost in
                                             Mule Lifecycle Staging
                                                        │
                                                        ▼
-                                           Compliance Handoff (goAML)
+                                            Trust Handoff (goAML XML)
 ```
 
 ### Component Topology
-- **FastAPI Gateway (`backend/app.py`):** Exposes integration API endpoints for banks and threat intel networks.
-- **ML Engine (`backend/ml/predictor.py`):** Runs pre-trained XGBoost classifiers on 122 profile variables.
-- **SHAP Engine (`backend/ml/shap_engine.py`):** Generates local explanation weights mapping features to plain English.
-- **Graph Service (`backend/graph_service.py`):** Tracks transaction flows, circular routes, and sinks in Neo4j.
+- **FastAPI Gateway (`backend/app.py`):** Exposes core integration API endpoints for trust lookups and network alerts.
+- **ML Predictor Client (`backend/ml/predictor.py`):** Scores behavioral anomalies across 122 profile variables.
+- **SHAP Engine (`backend/ml/shap_engine.py`):** Translates XGBoost decision boundaries into plain-English attributions.
+- **Graph Service (`backend/graph_service.py`):** Tracks topology loops, degree centralities, and flow-direction patterns.
 - **Audit Database (`backend/database.py`):** Commits permanent audit logs and cryptographic hashes to PostgreSQL.
-- **goAML XML Autopilot (`backend/xml_generator.py`):** Automatically builds regulatory compliance filings.
+- **goAML XML Generator (`backend/xml_generator.py`):** Automates regulatory filing report compilations.
 
 ---
 
 ## 2. Database Schema Mappings
 
 ### PostgreSQL ORM (`case_audits` Table)
-Keeps an immutable trace of alerts, composite scores, decisions, and evidence checksums.
+Keeps an immutable audit log of threat scores, decisions, and evidence checksums.
 
 | Field | Type | Purpose |
 | :--- | :--- | :--- |
@@ -45,7 +45,7 @@ Keeps an immutable trace of alerts, composite scores, decisions, and evidence ch
 | `graph_score` | `Float` | Neo4j degree centrality value. |
 | `composite_score`| `Float` | Consolidated fusion risk score. |
 | `severity` | `String(20)` | Threat level: `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`. |
-| `mule_stage` | `String(30)` | Lifecycle stage name. |
+| `mule_stage` | `String(30)` | Resolved lifecycle stage name. |
 | `evidence_hash` | `String(64)` | SHA-256 evidence package checksum. |
 | `action_taken` | `String(100)` | Action executed: `AUTO_FREEZE` / `INVESTIGATOR_QUEUED`. |
 
@@ -59,7 +59,7 @@ Represents transaction connections:
 ## 3. Core API Endpoint Contracts
 
 ### `POST /analyze`
-Accepts a bulk CSV of transaction events, scores them, and generates alert profiles.
+Ingests transaction details, evaluates composite trust scores, and outputs risk signals.
 - **Response Shape (200 OK):**
 ```json
 {
@@ -88,6 +88,6 @@ Accepts a bulk CSV of transaction events, scores them, and generates alert profi
 
 $$\text{Composite Risk} = (\text{Profile Risk} \times 0.40) + (\text{Transaction Risk} \times 0.40) + (\text{Graph Risk} \times 0.20)$$
 
-- **Profile Risk (40%):** Standard XGBoost positive class probability.
+- **Profile Risk (40%):** Tabular XGBoost positive class probability.
 - **Graph Risk (20%):** Neo4j GDS normalized degree centrality score.
 - **Transaction Risk (40%):** Points compiled from heuristic rules (circular cycles, velocity bounds, dormant activity).
