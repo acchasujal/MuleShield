@@ -113,24 +113,33 @@ docker-compose ps
 
 ### 2. Run Backend API
 
-Create and activate a virtual environment, install dependencies, and run the server:
+Create and activate a virtual environment, install dependencies, and run the server from the root directory to ensure correct import mapping:
 
-**On Windows:**
-```bash
-cd backend
+**On Windows (Command Prompt):**
+```cmd
 python -m venv venv
-.\venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app:app --reload --port 8000
+call venv\Scripts\activate
+pip install -r backend/requirements.txt
+set PYTHONPATH=.
+uvicorn backend.app:app --reload --port 8000
+```
+
+**On Windows (PowerShell):**
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r backend/requirements.txt
+$env:PYTHONPATH="."
+uvicorn backend.app:app --reload --port 8000
 ```
 
 **On macOS/Linux:**
 ```bash
-cd backend
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
-uvicorn app:app --reload --port 8000
+pip install -r backend/requirements.txt
+export PYTHONPATH=.
+uvicorn backend.app:app --reload --port 8000
 ```
 
 Access Swagger docs at `http://localhost:8000/docs`.
