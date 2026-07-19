@@ -138,15 +138,16 @@ export function useCommandPalette(commands: Command[]) {
             if (filtered[idx]) execute(filtered[idx]);
           }
           // Letter shortcuts
-          if (!query && e.key === "g") {
+          const keyLower = e.key.toLowerCase();
+          if (!query && keyLower === "g") {
             const cmd = commands.find((c) => c.id === "guided");
             if (cmd) execute(cmd);
           }
-          if (!query && e.key === "r") {
+          if (!query && keyLower === "r") {
             const cmd = commands.find((c) => c.id === "reset");
             if (cmd) execute(cmd);
           }
-          if (!query && e.key === "o") {
+          if (!query && keyLower === "o") {
             const cmd = commands.find((c) => c.id === "toggle-mode");
             if (cmd) execute(cmd);
           }

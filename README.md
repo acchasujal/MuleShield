@@ -1,204 +1,94 @@
 # 🛡️ MuleShield AI
 
-> **Real-Time Mule Account Detection & Compliance Containment System**
-> Transforming a 72-hour manual investigation into a 4-second automated containment decision. Powered by XGBoost, NetworkX/Neo4j graph centralities, and Gemini AI explainability — built with FastAPI + Streamlit.
+> **Coordinated Mule Account Containment & Regulatory Autopilot Infrastructure**  
+> Dual-engine money-mule detection platform co-developed by **Bank of India** and **IIT Hyderabad** for **PEC Hacks 4.0 (PS-2)**.
 
 ---
 
-## 1. The Problem: The 72-Hour Gap
-India loses ₹1,776 crore annually to cyber fraud, with 66% passing through mule accounts. The critical issue is the **4–72 hour gap** between a victim filing a complaint (e.g., via I4C) and a bank investigator reviewing it. In this window, funds are dispersed. Current rule-based Transaction Monitoring Systems (TMS) fail to detect mule accounts because they evaluate transactions in isolation against static thresholds (e.g., >₹50,000), generating 95% false positives, while mule accounts often maintain compliant profiles and individual transaction limits.
+## 1. Project Vision
 
-## 2. The Solution: MuleShield AI
-MuleShield is a 4-layer on-premise system designed to identify, trace, and suspend money laundering "mule" accounts in under 8 seconds. It enables banks to freeze funds within the critical 4-hour recovery window before dispersal, potentially saving millions while eliminating compliance bottlenecks.
+India loses ₹66 million daily to cyber fraud, with **66% of stolen funds routed through mule accounts**. 
 
-**Key Value Propositions:**
-- **AML Investigator:** Receives a risk-ranked queue of flagged accounts, explained via SHAP, reducing investigation time from 4 hours to 47 minutes.
-- **Branch Risk Officer:** Gets clear freeze recommendations and escalation triggers.
-- **Compliance CCO / FIU Reporting:** Benefits from 8-second automated goAML XML STR generation, eliminating backlogs.
+MuleShield AI bridges the critical **4-to-72 hour gap** between a victim filing a complaint (e.g. via the MHA I4C portal) and a bank investigator freezing the target account. By fusing tabular ML, heuristic transaction rules, and topological graph analytics, MuleShield evaluates alerts and suspends accounts within **4 seconds** of complaint ingestion—protecting Mrs. Sharma's savings *before* the fraudster's automated dispersal script completes.
+
+> **MuleShield AI is not a fraud detector. It is India's missing mule containment infrastructure.**
 
 ---
 
-## 3. System Architecture
+## 2. Technology Stack
 
-MuleShield AI fuses state-of-the-art Tabular XGBoost prediction with Neo4j Graph Database topological centrality measurements and NetworkX heuristic analyzers. High-risk alerts automatically compile suspicious transaction reports (STR) conformant to FIU-IND goAML schemas, sealed with cryptographic signatures for legal evidence admissibility.
+- **ML Prediction**: Python, XGBoost Classifier, SHAP TreeExplainer
+- **Graph Topology**: Neo4j Graph Database (GDS), NetworkX Heuristic Analyzers
+- **Backend API**: FastAPI Gateway
+- **Frontend Workspace**: Vite, React, TypeScript, Framer Motion
+- **Audit Database**: PostgreSQL, SQLAlchemy ORM
+- **Infrastructure**: Docker Compose, local and on-premise configurations
 
-```mermaid
-graph TD
-    A[Incoming Transaction CSV / Live Webhook] --> B[FastAPI Gateway backend.app]
-    B --> C[Validate & Slices Columns backend.utils]
-    
-    C --> D[XGBoost Prediction Engine backend.ml.predictor]
-    C --> E[Heuristic Graph Network Analyzers backend.fraud_detection]
-    C --> F[Neo4j GDS Centrality Query backend.graph_service]
-    
-    D --> G[Risk Fusion Engine backend.risk_scoring]
-    E --> G
-    F --> G
-    
-    G --> H[Composite Risk Fusion Score]
-    H --> I[SOP Lifecycle Classifier backend.ml.lifecycle_engine]
-    H --> J[XAI SHAP Explainer backend.ml.shap_engine]
-    
-    I --> K[FastAPI Response Payload]
-    J --> K
-    
-    K --> L[Streamlit Interactive UI frontend.app]
-    K --> M[PostgreSQL Audit Log backend.database]
-    K --> N[Tamper-Proof goAML XML Report backend.xml_generator]
+---
+
+## 3. Repository Directory Structure
+
+```
+Muleshield/
+├── backend/            # FastAPI gateways, ML engines, and XML auto-STR compilers
+├── frontend-react/     # React web UI workspace (Vite, TypeScript, CSS Tokens)
+├── docs/               # Consolidated 12-file numbered documentation tree
+│   ├── 01_PROJECT_CONTEXT.md
+│   ├── 02_ARCHITECTURE.md
+│   ├── 03_BUILD_GUIDE.md
+│   ...
+├── docker-compose.yml  # PostgreSQL and Neo4j database containers
+└── README.md           # Main project entry point (This file)
 ```
 
 ---
 
-## 4. Core Features
+## 4. Documentation Index
 
-### 🧠 Dual-Engine Fusion
-Combines machine learning scores (XGBoost + SMOTE with 111:1 class imbalance handling) with topological graph network centralities (Neo4j GDS / NetworkX) to evaluate topological risk and detect mule hubs. `Composite Risk = (ML Probability × 0.40) + (Transaction Signal Score × 0.40) + (Graph Centrality × 0.20)`
+For detailed guidelines, configurations, and scripts, refer to the numbered documentation in `/docs`:
 
-### 🔄 Mule Lifecycle Staging
-Maps accounts dynamically into 5 states: *Newly Recruited*, *Activation*, *Active Mule*, *Being Flushed*, and *Dormant*. This dictates investigator action (e.g., monitor vs. emergency freeze).
-
-### 💡 Explainable AI (XAI)
-Provides per-row SHAP attribution models to visualize exactly which features contributed to the alert, mapped to plain English (e.g., "Regulatory watchlist flag active (+23 pts)").
-
-### 📑 Auto-goAML Autopilot
-Instantly generates XML suspicious transaction reports compliant with international FIU standards. Reduces STR writing time from 8 hours to 8 seconds.
-
-### 🔒 Cryptographic Tamper-Proofing
-Seals evidence packages using SHA-256 hashes conformant to legal standards (e.g., Section 65B of the Indian Evidence Act) for court admissibility.
-
-### 🔌 I4C Webhook Integration & Batch CSV
-Native integration to ingest MHA I4C JSON payloads. Alternatively, handles high-throughput scoring of CBS exports (Finacle batch CSV), eliminating the need for costly Core Banking System (CBS) modifications.
-
-### 🛡️ Resilient Offline Fallback
-Gracefully falls back to ML-only if Neo4j fails, or SHAP text if LLM API fails. High availability for operational deployments.
+1. **[01_PROJECT_CONTEXT.md](file:///d:/Projects/Muleshield/docs/01_PROJECT_CONTEXT.md)**: Problem statement, target personas, and differentiators.
+2. **[02_ARCHITECTURE.md](file:///d:/Projects/Muleshield/docs/02_ARCHITECTURE.md)**: Score fusion formulas, system blueprints, API schemas, and Postgres ORM mappings.
+3. **[03_BUILD_GUIDE.md](file:///d:/Projects/Muleshield/docs/03_BUILD_GUIDE.md)**: Setup variables, pip install steps, and database container commands.
+4. **[04_UI_UX_GUIDE.md](file:///d:/Projects/Muleshield/docs/04_UI_UX_GUIDE.md)**: Navigation layouts, bento grids, and screen-by-screen page designs.
+5. **[05_DESIGN_SYSTEM.md](file:///d:/Projects/Muleshield/docs/05_DESIGN_SYSTEM.md)**: Typography parameters, CSS HSL design tokens, and radius scales.
+6. **[06_IMPLEMENTATION.md](file:///d:/Projects/Muleshield/docs/06_IMPLEMENTATION.md)**: AppContext states, file listings, and custom hooks details.
+7. **[07_DEMO_GUIDE.md](file:///d:/Projects/Muleshield/docs/07_DEMO_GUIDE.md)**: Guided scenario pitch scripts and presentation timings.
+8. **[08_DATASET.md](file:///d:/Projects/Muleshield/docs/08_DATASET.md)**: Connected money-laundering network topology.
+9. **[09_PRESENTATION.md](file:///d:/Projects/Muleshield/docs/09_PRESENTATION.md)**: Competitive advantages and pitch deck presentation structures.
+10. **[10_AI_CONTEXT.md](file:///d:/Projects/Muleshield/docs/10_AI_CONTEXT.md)**: Mapped SHAP indicators and ML feature index maps.
+11. **[11_CHANGELOG.md](file:///d:/Projects/Muleshield/docs/11_CHANGELOG.md)**: Historical release notes and improvements.
+12. **[12_FINAL_POLISH_REPORT.md](file:///d:/Projects/Muleshield/docs/12_FINAL_POLISH_REPORT.md)**: Polishing audits and readiness scores.
 
 ---
 
-## 5. Dataset Setup
-MuleShield AI requires a Bank of India (BOI) transaction dataset for training and full inference pipelines.
-* The full BOI dataset (`DataSet.csv`) is **not included** in this GitHub repository due to file size limits and data distribution constraints.
-* Users must place their transaction dataset at:
-  ```path
-  data/boi/DataSet.csv
-  ```
-* For detailed instructions and directory structure information, please refer to the [data/README.md](file:///d:/Projects/FundTrace-AI/data/README.md).
+## 5. Setup & Ingestion
 
----
+Ensure Docker Desktop, Node.js (v18+), and Python (v3.10+) are installed.
 
-## 6. Installation
-MuleShield AI is designed for rapid one-command setup. Ensure Python 3.10+ is installed on your local host machine.
-
-### Windows (PowerShell)
-```powershell
-./scripts/setup.ps1
-```
-
-### Windows Command Prompt (cmd.exe)
-```cmd
-powershell -ExecutionPolicy Bypass -File scripts\setup.ps1
-```
-
-### Linux / macOS (Bash)
+### Step 1: Start Databases
 ```bash
-chmod +x ./scripts/setup.sh
-./scripts/setup.sh
+docker-compose up -d
 ```
 
----
+### Step 2: Run FastAPI Backend
+1. Go to `/backend` and install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Start the API server:
+   ```bash
+   uvicorn app:app --reload --port 8000
+   ```
+   * Swagger Documentation is live at `http://localhost:8000/docs`.
 
-## 7. Quick Start
-Follow these steps to run the MuleShield AI application locally:
-
-### Step 1: Start Services (Docker Compose)
-Start the Docker database services:
-```bash
-docker compose up -d
-```
-
-### Step 2: Ingest Scenarios
-Execute the dataset generator script once to generate Indian banking CSV transaction matrices:
-```bash
-python generate_synthetic_data.py
-```
-
-### Step 3: Start the Backend API
-Run the FastAPI web server:
-```cmd
-venv\Scripts\python.exe -m uvicorn backend.app:app --reload --port 8000
-```
-* **Interactive Swagger Documentation** → [http://localhost:8000/docs](http://localhost:8000/docs)
-
-### Step 4: Start the Frontend UI
-Launch the Streamlit web dashboard in a separate terminal:
-```cmd
-venv\Scripts\streamlit.exe run frontend/app.py
-```
-* **Web UI Dashboard** → [http://localhost:8501](http://localhost:8501)
-
----
-
-## 8. Environment Variables
-MuleShield loads all configurations from `.env`. A complete configuration blueprint is defined in `.env.example`:
-
-| Env Variable | Purpose | Default |
-| :--- | :--- | :--- |
-| `POSTGRES_HOST` | PostgreSQL Host address | `localhost` |
-| `POSTGRES_PORT` | PostgreSQL database TCP port | `5432` |
-| `POSTGRES_DB` | Target PostgreSQL database name | `muleshield` |
-| `POSTGRES_USER` | PostgreSQL superuser username | `postgres` |
-| `POSTGRES_PASSWORD` | PostgreSQL database password | `postgres` |
-| `NEO4J_URI` | Neo4j Bolt URL connection string | `bolt://localhost:7687` |
-| `NEO4J_USER` | Neo4j administrative username | `neo4j` |
-| `NEO4J_PASSWORD` | Neo4j database password | `password` |
-| `NVIDIA_API_KEY` | Optional NVIDIA NIM API key | *(Omitted)* |
-| `GEMINI_API_KEY` | Google Gemini API key for explaining | *(Omitted)* |
-
----
-
-## 9. Docker Setup
-To standardise environment startup, MuleShield features a configured `docker-compose.yml` defining database infrastructure:
-
-* **PostgreSQL:** Port `5432` (database: `muleshield`, user: `postgres`, password: `postgres`). Persisted in named volume `postgres-data`.
-* **Neo4j:** Ports `7687` (Bolt protocol) and `7474` (HTTP graph dashboard browser). Username: `neo4j`, Password: `password`. Persisted in named volumes `neo4j-data` and `neo4j-logs`.
-
-### Execution commands
-```bash
-# Start containers
-docker compose up -d
-
-# Stop and teardown containers
-docker compose down -v
-```
-
----
-
-## 10. Local Development
-### Run Code Audits
-Verify syntax warnings and check for compliance words across the codebase:
-```bash
-python check_audit.py
-```
-
-### Run Health Checks
-Run the diagnostic framework at any time to verify directories, ML weights, datasets, and database connections:
-```bash
-python health_check.py
-```
-
-### Run Test Suites
-Verify inference logic, routing endpoints, graph heuristics, and database fallbacks:
-```bash
-python -m unittest discover -s tests
-```
-
----
-
-## 11. Troubleshooting
-
-| Issue | Root Cause | Resolution |
-| :--- | :--- | :--- |
-| `Cannot connect to MuleShield API` | FastAPI backend is not running | Activate virtual environment and run the backend gateway starting command. |
-| `Scenario CSV Files Not Found` | Dataset generator has not run | Execute `python generate_synthetic_data.py` to compile the standard scenarios. |
-| `Streamlit ModuleNotFoundError` | Venv environment not active | Make sure to activate `venv` before executing streamlit commands. |
-| `HEALTH CHECK WARNING on Database` | Databases are offline | This is expected if docker containers are not active. Application will automatically run in high-fidelity mock fallback mode. Run `docker compose up -d` to connect. |
-| `PyVis network graph doesn't load` | Pyvis rendering error | Verify that graph components are running cleanly. If rendering fails, a clean warning banner will display without crashing the Streamlit session. |
+### Step 3: Run React Web Workspace
+1. Go to `/frontend-react` and install node packages:
+   ```bash
+   npm install
+   ```
+2. Run the developer build:
+   ```bash
+   npm run dev
+   ```
+   * Access the UI workspace at `http://localhost:5173/`.

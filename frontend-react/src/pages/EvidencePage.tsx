@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import { FileCheck2, FileText, ClipboardCheck, ShieldCheck } from "lucide-react";
 import { useAppContext } from "../contexts/AppContext";
-import { severityClass, labelStage } from "../utils/caseUtils";
+import { severityClass, labelStage, formatAccount } from "../utils/caseUtils";
 import { downloadText } from "../utils/download";
 
 export function EvidencePage() {
@@ -92,7 +92,7 @@ export function EvidencePage() {
                       {candidate.case_id}
                     </div>
                     <div className="case-signal">
-                      {candidate.account} ·{" "}
+                      {formatAccount(candidate.account)} ·{" "}
                       {index === 0 || pkgReady ? "Sealed" : "Draft"}
                     </div>
                   </div>
@@ -150,7 +150,7 @@ export function EvidencePage() {
         {/* Right: Report preview */}
         <section className="card" aria-label="Report-ready package">
           <div className="eyebrow">Report-ready package</div>
-          <h2 style={{ marginTop: "var(--space-2)" }}>Case {account}</h2>
+          <h2 style={{ marginTop: "var(--space-2)" }} title={account}>Case {formatAccount(account)}</h2>
 
           <div className="report-preview" style={{ marginTop: "var(--space-5)" }}>
             <div className="eyebrow">MuleShield AI · Investigation report</div>

@@ -133,27 +133,43 @@
 .severity-low      { color: var(--color-low); }
 
 /* ── Case row ────────────────────────────────────────────── */
+.case-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
 .case-row {
   display: grid;
-  grid-template-columns: 86px minmax(0, 1fr) 70px;
+  grid-template-columns: 92px minmax(0, 1fr) 72px;
   gap: var(--space-4);
   align-items: center;
-  padding: var(--space-4);
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  background: var(--color-surface-subtle);
-  transition:
-    border-color var(--duration-base) var(--easing-standard),
-    background var(--duration-base) var(--easing-standard);
+  padding: var(--space-4) var(--space-5);
+  border: none;
+  border-bottom: 1px solid var(--color-border-subtle);
+  border-radius: 0;
+  background: var(--color-surface);
+  transition: all var(--duration-base) var(--easing-standard);
   text-align: left;
   color: inherit;
   width: 100%;
 }
 
-.case-row:hover,
-.case-row.selected {
-  border-color: rgba(91, 95, 239, 0.55);
+.case-row:last-child {
+  border-bottom: none;
+}
+
+.case-row:hover {
   background: var(--color-surface-raised);
+}
+
+.case-row.selected {
+  background: rgba(91, 95, 239, 0.08);
+  box-shadow: inset 3px 0 0 var(--color-accent);
 }
 
 .case-account {
@@ -172,16 +188,15 @@
 
 .case-score {
   text-align: right;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-}
-
-/* ── Case list ───────────────────────────────────────────── */
-.case-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px var(--space-2);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--color-border);
+  width: fit-content;
+  margin-left: auto;
 }
 
 /* ── Section head ────────────────────────────────────────── */
@@ -386,11 +401,13 @@
 }
 
 .network-node-secondary {
-  width: 32px;
-  height: 32px;
-  border-color: rgba(255, 255, 255, 0.20);
-  background: var(--color-surface-raised);
-  color: var(--color-text-muted);
+  width: 38px;
+  height: 38px;
+  border-color: var(--color-accent-border);
+  background: var(--color-surface-subtle);
+  color: var(--color-accent-muted);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
 }
 
 .network-node-n1 { top: 25px; left: 18%; }
@@ -420,26 +437,27 @@
 
 /* ── Recommendation block ────────────────────────────────── */
 .recommendation {
-  border-left: 2px solid var(--color-accent);
-  background: rgba(91, 95, 239, 0.08);
-  padding: var(--space-3) var(--space-4);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  margin-top: var(--space-4);
+  border: 1px solid var(--color-accent-border);
+  background: linear-gradient(135deg, rgba(91, 95, 239, 0.12), rgba(91, 95, 239, 0.04));
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-5);
+  box-shadow: var(--shadow-sm);
 }
 
 .recommendation strong {
   display: block;
   font-size: var(--text-base);
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
 }
 
 /* ── Review capture (analyst decision) ──────────────────── */
 .review-capture {
-  margin-top: var(--space-3);
+  margin-top: var(--space-4);
 }
 
 .chip-btn {
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-4);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-full);
   background: transparent;
@@ -464,40 +482,40 @@
   color: var(--color-accent-muted);
 }
 
-/* ── Scenario switcher ───────────────────────────────────── */
+/* ── Scenario switcher (Segmented control) ──────────────── */
 .scenario-switcher {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
-  flex-wrap: wrap;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+  margin-bottom: var(--space-5);
 }
 
 .scenario-chip {
   padding: var(--space-1) var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-full);
+  border: none;
+  border-radius: var(--radius-xs);
   background: transparent;
   color: var(--color-text-muted);
   font-size: var(--text-xs);
   font-weight: 600;
   font-family: var(--font-mono);
   cursor: pointer;
-  transition:
-    border-color var(--duration-base),
-    background var(--duration-base),
-    color var(--duration-base);
+  transition: all var(--duration-fast);
 }
 
 .scenario-chip:hover {
-  border-color: var(--color-accent-border);
   color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .scenario-chip.active {
-  border-color: var(--color-accent);
-  background: var(--color-accent-soft);
-  color: var(--color-accent-muted);
+  background: var(--color-accent);
+  color: #ffffff;
+  box-shadow: var(--shadow-xs);
 }
 
 /* ── Score wrap ──────────────────────────────────────────── */

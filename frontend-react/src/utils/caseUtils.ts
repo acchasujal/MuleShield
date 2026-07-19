@@ -72,3 +72,15 @@ export function recommendationFor(severity: Severity): string {
       return "Immediate review and escalation under bank policy.";
   }
 }
+
+/**
+ * Formats a raw account number into a clean, human-readable ID with Bank code.
+ */
+export function formatAccount(account: string): string {
+  if (!account) return "";
+  if (account.startsWith("ACC052")) {
+    return `BOI •••• ${account.slice(-4)}`;
+  }
+  return account;
+}
+

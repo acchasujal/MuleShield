@@ -4,7 +4,7 @@
 // ============================================================
 
 import { memo } from "react";
-import { labelStage, severityClass } from "../../utils/caseUtils";
+import { labelStage, severityClass, formatAccount } from "../../utils/caseUtils";
 import { Highlight } from "../ui/Highlight";
 import type { CaseItem } from "../../types";
 
@@ -46,8 +46,8 @@ export const CaseRow = memo(function CaseRow({
       </div>
 
       <div>
-        <div className="case-account font-mono">
-          <Highlight text={item.account} query={query} />
+        <div className="case-account font-mono" title={item.account}>
+          <Highlight text={formatAccount(item.account)} query={query} />
         </div>
         <div className="case-signal">
           <Highlight text={item.reasons.join(" · ")} query={query} />
@@ -69,8 +69,8 @@ export const CaseRow = memo(function CaseRow({
             marginTop: "var(--space-1)",
           }}
         >
-          <span className="case-account font-mono text-xs">
-            <Highlight text={item.account} query={query} />
+          <span className="case-account font-mono text-xs" title={item.account}>
+            <Highlight text={formatAccount(item.account)} query={query} />
           </span>
           <strong className="font-mono text-sm">
             {Math.round(item.risk_score)}

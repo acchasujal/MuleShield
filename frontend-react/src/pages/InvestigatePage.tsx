@@ -8,7 +8,7 @@ import { ArrowLeft, FileCheck2 } from "lucide-react";
 import { useAppContext } from "../contexts/AppContext";
 import { useCountUp } from "../hooks/useCountUp";
 import { FALLBACK_CASES } from "../data/fallbackCases";
-import { severityClass } from "../utils/caseUtils";
+import { severityClass, formatAccount } from "../utils/caseUtils";
 import { ScenarioSwitcher } from "../components/investigation/ScenarioSwitcher";
 import { DecisionSurface } from "../components/investigation/DecisionSurface";
 import { CaseBrief } from "../components/investigation/CaseBrief";
@@ -150,7 +150,7 @@ export function InvestigatePage({ query }: InvestigatePageProps) {
             <ArrowLeft size={15} aria-hidden="true" />
             Cases
           </button>
-          <span className="font-mono text-sm text-muted">{account}</span>
+          <span className="font-mono text-sm text-muted" title={account}>{formatAccount(account)}</span>
           <div className={`status-badge severity-${severityClass(item.severity)}`}>
             <span className="status-dot" aria-hidden="true" />
             {item.severity}
