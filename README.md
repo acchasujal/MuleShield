@@ -113,8 +113,22 @@ docker-compose ps
 
 ### 2. Run Backend API
 
+Create and activate a virtual environment, install dependencies, and run the server:
+
+**On Windows:**
 ```bash
 cd backend
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app:app --reload --port 8000
+```
+
+**On macOS/Linux:**
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 uvicorn app:app --reload --port 8000
 ```
